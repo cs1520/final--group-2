@@ -1,19 +1,143 @@
 * {
 	font-family: "Open Sans", sans-serif;
+
+	--light: #fafafa;
+	--neutral: #f0f0f0;
+	--dark: #e0e0e0;
+
+	--primary: rgba(30, 43, 111, 1);
+	--primary-1: rgba(30, 43, 111, 0.9);
+	--primary-2: rgba(30, 43, 111, 0.75);
+	--primary-3: rgba(30, 43, 111, 0.6);
+	--primary-4: rgba(30, 43, 111, 0.4);
+	--primary-5: rgba(30, 43, 111, 0.2);
+
+	--accent: rgba(121, 145, 255, 1);
+	--accent-1: rgba(121, 145, 255, 0.9);
+	--accent-2: rgba(121, 145, 255, 0.75);
+	--accent-3: rgba(121, 145, 255, 0.6);
+	--accent-4: rgba(121, 145, 255, 0.4);
+	--accent-5: rgba(121, 145, 255, 0.2);
+
+	--on-light: #000000;
+	--on-light-1: rgba(0, 0, 0, 0.9);
+	--on-light-2: rgba(0, 0, 0, 0.75);
+	--on-light-3: rgba(0, 0, 0, 0.6);
+	--on-light-4: rgba(0, 0, 0, 0.4);
+	--on-light-5: rgba(0, 0, 0, 0.2);
 }
 
 body {
 	display: flex;
 	margin: 0;
+	min-height: 100vh;
+
+	background-color: var(--light);
+	color: var(--on-light);
 }
 
+.button {
+	display: inline-flex;
+	padding: 16px;
+	border-radius: 56px;
+	text-decoration: none;
+	font-weight: bold;
+
+	color: var(--on-light-3);
+	background-color: transparent;
+
+	transition: color .25s, background-color .25s;
+}
+
+/* component styles (reusable elements) */
+
+/* button */
+.button.active {
+	color: var(--primary);
+}
+
+.button:hover {
+	color: var(--primary);
+	background-color: var(--accent-5);
+}
+
+.button:active {
+	color: var(--on-light);
+	background-color: var(--accent-5);
+}
+
+.button > .material-icons {
+	margin-right: 12px;
+}
+
+/* image styles */
+img {
+	max-width: 100%;
+}
+
+img.img-round {
+	border-radius: 50%;
+	border: 1px solid var(--on-light);
+}
+
+/* user-item (small element displaying basic user info) */
+.user-item {
+	display: inline-flex;
+	align-items: center;
+}
+
+.user-item img {
+	height: 42px;
+	width: 42px;
+	margin-right: 12px;
+}
+
+.user-item div {
+	flex-grow: 1;
+}
+
+.user-item div > .user-name {
+	display: block;
+	color: var(--on-light-1);
+}
+
+.user-item div > .user-id {
+	display: block;
+	color: var(--on-light-3);
+}
+
+/* page styles (specific page components) */
+
 nav {
+	display: flex;
+	flex-direction: column;
 	min-width: 256px;
 	padding: 16px;
+	overflow: hidden;
+
+	background-color: var(--neutral);
+	box-shadow: 0 0 1.2rem var(--on-light-5);
 }
 
 nav.hidden {
 	transform: scaleX(0);
+}
+
+.nav-logo {
+	font-family: 'Unica One', cursive;
+	font-weight: normal;
+	font-size: 2em;
+	padding: 0 16px;
+}
+
+.nav-list {
+	list-style: none;
+	padding: 0;
+	flex-grow: 1;
+}
+
+.nav-list > .button {
+	display: flex;
 }
 
 main {

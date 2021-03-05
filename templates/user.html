@@ -1,20 +1,20 @@
 {% extends "_page.html" %}
 
-{% block title %}<h1>{{ user.displayName }}'s Profile</h1>{% endblock %}
+{% block title %}{{ page.user.name }}'s Profile{% endblock %}
 
 {% block content %}
-<!-- This is the user file for {{ user.displayName }} (@{{ user.username }}). -->
+<!-- This is the user file for {{ page.user.name }} (@{{ page.user.id }}). -->
 
 <div id="profile-area">
-    <label for="poke">Poke {{ user.displayName }}!</label>
-    <button id="poke-button"><img id="profile-image" src="{{ user.profileImage }}" alt="Profile image of {{ user.username }}"></button>
-    <h2 id="profile-display-name">{{ user.displayName }}</h2>
-    <h3 id="profile-username">{{ user.username }}</h3>
-    <p id="profile-description">{{ user.bio }}</p>
+    <label for="poke">Poke {{ page.user.name }}!</label>
+    <button id="poke-button"><img id="profile-image" src="{{ page.user.image }}" alt="Profile image of {{ page.user.name }}"></button>
+    <h2 id="profile-display-name">{{ page.user.name }}</h2>
+    <h3 id="profile-username">{{ page.user.id }}</h3>
+    <p id="profile-description">{{ page.user.bio }}</p>
 </div>
 
 <div id="poke-statistics-area">
-    <canvas id="poke-interval-chart" aria-label="{{ user.displayName }}'s poke statistics over time" role="img"></canvas>
+    <canvas id="poke-interval-chart" aria-label="{{ page.user.name }}'s poke statistics over time" role="img"></canvas>
 </div>
 
 {% endblock %}
