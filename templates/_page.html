@@ -1,21 +1,41 @@
 {% extends "_base.html" %}
 {% block bodycontent %}
 <nav>
-	<h1>Acufuncture</h1>
+	<h1 class="nav-logo">Acufuncture</h1>
 
-	<ul class="nav-list">
-		<li><a href="/">Home</a></li>
-		<li><a href="/">Explore</a></li>
-		<li><a href="/notifications">Notifications</a></li>
-		<li><a href="/@user">Profile</a></li>
-	</ul>
+	<div class="nav-list">
+		<a href="/" class="button{% if request.path == "/" %} active{% endif %}">
+			<i class="material-icons">home</i>
+			Home
+		</a>
+		<a href="/" class="button{% if request.path.startswith("/explore") %} active{% endif %}">
+			<i class="material-icons">public</i>
+			Explore
+		</a>
+		<a href="/notifications" class="button{% if request.path.startswith("/notifications") %} active{% endif %}">
+			<i class="material-icons">notifications</i>
+			Notifications
+		</a>
+		<a href="/@user" class="button{% if request.path.startswith("/@") %} active{% endif %}">
+			<i class="material-icons">person</i>
+			Profile
+		</a>
+	</div>
+
+	<a href="/@mobydick" class="user-item button">
+		<img class="img-round" src="{{ user.image }}">
+		<div>
+			<span class="user-name">{{ user.name }}</span>
+			<span class="user-id">@{{ user.id }}</span>
+		</div>
+	</a>
 </nav>
 
 <main>
 	<header>
 		<button class="nav-toggle">|||</button>
 		<form id="search-form" class="search-form" action="/search" enctype="application/x-www-form-urlencoded">
-			<input id="search-input" class="search-input" name="q" type="text" placeholder="Search for a friend (to poke)..." value="{{ query }}">
+			<input id="search-input" class="search-input" name="q" type="text" placeholder="Search for a friend (to poke)..." value="{{ page.query }}">
 		</form>
 		<button class="user"></button>
 	</header>
