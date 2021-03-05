@@ -1,0 +1,20 @@
+{% extends "_page.html" %}
+
+{% block title %}<h1>{{ user.displayName }}'s Profile</h1>{% endblock %}
+
+{% block content %}
+<!-- This is the user file for {{ user.displayName }} (@{{ user.username }}). -->
+
+<div id="profile-area">
+    <label for="poke">Poke {{ user.displayName }}!</label>
+    <button id="poke-button"><img id="profile-image" src="{{ user.profileImage }}" alt="Profile image of {{ user.username }}"></button>
+    <h2 id="profile-display-name">{{ user.displayName }}</h2>
+    <h3 id="profile-username">{{ user.username }}</h3>
+    <p id="profile-description">{{ user.bio }}</p>
+</div>
+
+<div id="poke-statistics-area">
+    <canvas id="poke-interval-chart" aria-label="{{ user.displayName }}'s poke statistics over time" role="img"></canvas>
+</div>
+
+{% endblock %}
