@@ -19,6 +19,7 @@ def home():
 		user = testuser)
 
 @app.route("/login")
+@app.route("/register")
 def login():
 	"""Return the login / sign-up page."""
 	return render_template("login.html")

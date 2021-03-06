@@ -19,7 +19,7 @@
 			<i class="material-icons">notifications</i>
 			Notifications
 		</a>
-		<a href="/@user" class="button{% if request.path.startswith("/@") %} active{% endif %}">
+		<a href="/@{{ user.id }}" class="button{% if request.path.startswith("/@") %} active{% endif %}">
 			<i class="material-icons">person</i>
 			Profile
 		</a>
