@@ -70,6 +70,11 @@ body {
 	margin-right: 12px;
 }
 
+/* material-icons styles (prevent user selection) */
+.material-icons {
+	user-select: none;
+}
+
 /* image styles */
 img {
 	max-width: 100%;
@@ -78,6 +83,17 @@ img {
 img.img-round {
 	border-radius: 50%;
 	border: 1px solid var(--on-light);
+}
+
+/* text input styles */
+input[type=text],
+input[type=email],
+input[type=password] {
+	padding: 8px;
+
+	background-color: var(--neutral);
+	border: 1px solid var(--on-light-5);
+	border-radius: 4px;
 }
 
 /* user-item (small element displaying basic user info) */
@@ -111,16 +127,23 @@ img.img-round {
 nav {
 	display: flex;
 	flex-direction: column;
-	min-width: 256px;
-	padding: 16px;
+	min-width: 320px;
+	max-width: 0px;
+	padding: 16px 0;
 	overflow: hidden;
 
 	background-color: var(--neutral);
 	box-shadow: 0 0 1.2rem var(--on-light-5);
+
+	transition: min-width .25s;
 }
 
-nav.hidden {
-	transform: scaleX(0);
+nav[hidden] {
+	min-width: 0;
+}
+
+nav > * {
+	margin: 0 16px;
 }
 
 .nav-logo {
@@ -128,6 +151,17 @@ nav.hidden {
 	font-weight: normal;
 	font-size: 2em;
 	padding: 0 16px;
+	margin-bottom: 18px;
+
+	display: flex;
+	align-items: center;
+	user-select: none;
+}
+
+.nav-logo > img {
+	height: 24px;
+	width: 24px;
+	margin-right: 12px;
 }
 
 .nav-list {
@@ -148,13 +182,13 @@ main {
 header {
 	display: flex;
 	padding: 16px;
+	align-items: center;
 }
 
 header .nav-toggle {
-	background: none; border: none;
-
-	transform: rotate(90deg);
-	font-size: 1.5rem;
+	background: none;
+	border: none;
+	color: var(--on-light-4);
 }
 
 header .search-form {
@@ -164,5 +198,12 @@ header .search-form {
 
 header .search-input {
 	width: 50%;
-	padding: 8px;
+	padding: 12px;
+	text-align: center;
+}
+
+header .header-image > img {
+	display: block;
+	height: 42px;
+	width: 42px;
 }
