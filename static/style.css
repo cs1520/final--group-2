@@ -25,6 +25,13 @@
 	--on-light-3: rgba(0, 0, 0, 0.6);
 	--on-light-4: rgba(0, 0, 0, 0.4);
 	--on-light-5: rgba(0, 0, 0, 0.2);
+
+	--on-dark: #ffffff;
+	--on-dark-1: rgba(255, 255, 255, 0.9);
+	--on-dark-2: rgba(255, 255, 255, 0.75);
+	--on-dark-3: rgba(255, 255, 255, 0.6);
+	--on-dark-4: rgba(255, 255, 255, 0.4);
+	--on-dark-5: rgba(255, 255, 255, 0.2);
 }
 
 body {
@@ -36,9 +43,24 @@ body {
 	color: var(--on-light);
 }
 
+/* component styles (reusable elements) */
+
+/* text */
+p {
+	color: var(--on-light-2);
+}
+
+/* link */
+a {
+	color: var(--primary);
+}
+
+/* button */
 .button {
 	display: inline-flex;
 	padding: 16px;
+	outline: none;
+	border: none;
 	border-radius: 56px;
 	text-decoration: none;
 	font-weight: bold;
@@ -49,9 +71,6 @@ body {
 	transition: color .25s, background-color .25s;
 }
 
-/* component styles (reusable elements) */
-
-/* button */
 .button.active {
 	color: var(--primary);
 }
@@ -61,13 +80,30 @@ body {
 	background-color: var(--accent-5);
 }
 
-.button:active {
+.button:active, .button:focus {
 	color: var(--on-light);
 	background-color: var(--accent-5);
+
+	box-shadow: 0 0 0 3px var(--primary-4);
+}
+
+.button-primary {
+	color: var(--on-dark);
+	background-color: var(--primary);
+}
+
+.button-primary:hover, .button-primary:active, .button-primary:focus {
+	color: var(--on-dark);
+	background-color: var(--primary-2);
 }
 
 .button > .material-icons {
 	margin-right: 12px;
+}
+
+/* material-icons styles (prevent user selection) */
+.material-icons {
+	user-select: none;
 }
 
 /* image styles */
@@ -78,6 +114,25 @@ img {
 img.img-round {
 	border-radius: 50%;
 	border: 1px solid var(--on-light);
+}
+
+/* text input styles */
+input[type=text],
+input[type=email],
+input[type=password] {
+	padding: 8px;
+
+	background-color: var(--neutral);
+	border: 1px solid var(--on-light-5);
+	border-radius: 4px;
+}
+
+/* panel / surface component (used for small "card" layouts) */
+.card {
+	display: inline-block;
+	background-color: var(--light);
+	border-radius: 8px;
+	box-shadow: 0 0.4rem 1.2rem var(--on-light-5);
 }
 
 /* user-item (small element displaying basic user info) */
@@ -111,16 +166,23 @@ img.img-round {
 nav {
 	display: flex;
 	flex-direction: column;
-	min-width: 256px;
-	padding: 16px;
+	min-width: 320px;
+	max-width: 0px;
+	padding: 16px 0;
 	overflow: hidden;
 
 	background-color: var(--neutral);
 	box-shadow: 0 0 1.2rem var(--on-light-5);
+
+	transition: min-width .25s;
 }
 
-nav.hidden {
-	transform: scaleX(0);
+nav[hidden] {
+	min-width: 0;
+}
+
+nav > * {
+	margin: 0 16px;
 }
 
 .nav-logo {
@@ -128,6 +190,17 @@ nav.hidden {
 	font-weight: normal;
 	font-size: 2em;
 	padding: 0 16px;
+	margin-bottom: 18px;
+
+	display: flex;
+	align-items: center;
+	user-select: none;
+}
+
+.nav-logo > img {
+	height: 24px;
+	width: 24px;
+	margin-right: 12px;
 }
 
 .nav-list {
@@ -148,13 +221,18 @@ main {
 header {
 	display: flex;
 	padding: 16px;
+	align-items: center;
 }
 
 header .nav-toggle {
-	background: none; border: none;
+	background: none;
+	border: none;
+	color: var(--on-light-4);
+	text-decoration: none;
+}
 
-	transform: rotate(90deg);
-	font-size: 1.5rem;
+header .nav-toggle > .material-icons {
+	display: block;
 }
 
 header .search-form {
@@ -164,5 +242,52 @@ header .search-form {
 
 header .search-input {
 	width: 50%;
-	padding: 8px;
+	padding: 12px;
+	text-align: center;
+}
+
+header .header-image > img {
+	display: block;
+	height: 42px;
+	width: 42px;
+}
+
+/* login page */
+#login-form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+	background: linear-gradient(
+		-28deg,
+		var(--primary-4),
+		var(--accent-2)
+	);
+
+	width: 100%;
+	height: 100vh;
+}
+
+#login-form > .nav-logo {
+	margin-bottom: 64px;
+}
+
+#login-form > h1:not(.nav-logo) {
+	margin: 0;
+}
+
+#login-form > .card {
+	display: inline-flex;
+	flex-direction: column;
+	align-items: center;
+
+	margin-top: 32px;
+	padding: 32px;
+}
+
+#login-form > .card > input {
+	text-align: center;
+	justify-content: center;
+	margin: 8px 0;
+	width: 200px;
 }
