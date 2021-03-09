@@ -39,6 +39,7 @@
 		<a id="sidebar-toggle" class="nav-toggle" href="#"><i class="material-icons">menu</i></a>
 		<form id="search-form" class="search-form" action="/search" enctype="application/x-www-form-urlencoded">
 			<input id="search-input" class="search-input" name="q" type="text" placeholder="Search for a friend (to poke)..." value="{{ page.query }}">
+			<ul id="search-list"></ul>			
 		</form>
 		<a class="header-image" href="/@{{ user.id }}">
 			<img class="img-round" src="{{ user.image }}">
