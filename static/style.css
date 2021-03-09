@@ -1,5 +1,6 @@
 * {
 	font-family: "Open Sans", sans-serif;
+	box-sizing: border-box;
 
 	--light: #fafafa;
 	--neutral: #f0f0f0;
@@ -68,7 +69,7 @@ a {
 	color: var(--on-light-3);
 	background-color: transparent;
 
-	transition: color .25s, background-color .25s;
+	transition: color .25s, background-color .25s, box-shadow .25s;
 }
 
 .button.active {
@@ -95,6 +96,30 @@ a {
 .button-primary:hover, .button-primary:active, .button-primary:focus {
 	color: var(--on-dark);
 	background-color: var(--primary-2);
+}
+
+.button-neutral {
+	color: var(--on-light-2);
+	background-color: var(--neutral);
+	box-shadow: 0 0 0 1px var(--on-light-5);
+}
+
+.button-neutral:hover {
+	box-shadow: 0 0 0 1px var(--accent);
+}
+
+.button-neutral:active, .button-neutral:focus {
+	box-shadow: 0 0 0 3px var(--primary-4);
+}
+
+.button-accent {
+	color: var(--primary);
+	background-color: var(--accent-5);
+	box-shadow: 0 0 0 1px var(--accent);
+}
+
+.button-accent:hover {
+	background-color: var(--accent-4);
 }
 
 .button > .material-icons {
@@ -170,6 +195,10 @@ nav {
 	max-width: 0px;
 	padding: 16px 0;
 	overflow: hidden;
+
+	max-height: 100vh;
+	position: sticky;
+	top: 0;
 
 	background-color: var(--neutral);
 	box-shadow: 0 0 1.2rem var(--on-light-5);
