@@ -6,15 +6,21 @@
 <!-- This is the user file for {{ page.user.name }} (@{{ page.user.id }}). -->
 
 <div id="profile-area">
-    <label for="poke">Poke {{ page.user.name }}!</label>
-    <button id="poke-button"><img id="profile-image" src="{{ page.user.image }}" alt="Profile image of {{ page.user.name }}"></button>
-    <h2 id="profile-display-name">{{ page.user.name }}</h2>
-    <h3 id="profile-username">{{ page.user.id }}</h3>
+    <form id="poke-button" action="" method="post">
+        <input type="image" id="profile-image-poke" src="{{ page.user.image }}" alt="Poke {{ page.user.name }}'s profile picture!">
+    </form>
+    <p id="profile-display-name">{{ page.user.name }}</p>
+    <p id="profile-username">{{ page.user.id }}</p>
     <p id="profile-description">{{ page.user.bio }}</p>
 </div>
 
 <div id="poke-statistics-area">
+    <div id="poked-by-box">
+        <p id="poked-by-text">{{ page.user.name }} received {{ page.user.pokes }} pokes from {{ page.user.pokers }} different users.</p>
+    </div>
     <canvas id="poke-interval-chart" aria-label="{{ page.user.name }}'s poke statistics over time" role="img"></canvas>
 </div>
+
+<script src="/static/js/profile.js" type="text/javascript"></script>
 
 {% endblock %}
