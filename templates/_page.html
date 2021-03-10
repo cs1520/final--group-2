@@ -2,6 +2,7 @@
 {% block bodycontent %}
 <nav id="sidebar">
 	<h1 class="nav-logo">
+		<a href="/" class="button{% if request.path == "/" %} active{% endif %}">
 		<img src="/static/img/logo.svg">
 		Acufuncture
 	</h1>
