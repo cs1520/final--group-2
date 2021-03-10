@@ -244,7 +244,8 @@ nav > * {
 
 main {
 	flex-grow: 1;
-	flex-shrink: 0;
+	flex-shrink: 1;
+	overflow-x: hidden;
 }
 
 header {

@@ -19,6 +19,10 @@
 			<i class="material-icons">notifications</i>
 			Notifications
 		</a>
+		<a href="/friends" class="button{% if request.path.startswith("/friends") %} active{% endif %}">
+			<i class="material-icons">group</i>
+			Friends
+		</a>
 		<a href="/@{{ user.id }}" class="button{% if request.path.startswith("/@") %} active{% endif %}">
 			<i class="material-icons">person</i>
 			Profile
@@ -39,6 +43,7 @@
 		<a id="sidebar-toggle" class="nav-toggle" href="#"><i class="material-icons">menu</i></a>
 		<form id="search-form" class="search-form" action="/search" enctype="application/x-www-form-urlencoded">
 			<input id="search-input" class="search-input" name="q" type="text" placeholder="Search for a friend (to poke)..." value="{{ page.query }}">
+			<ul id="search-list"></ul>			
 		</form>
 		<a class="header-image" href="/@{{ user.id }}">
 			<img class="img-round" src="{{ user.image }}">
