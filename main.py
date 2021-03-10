@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, redirect, url_for, render_template, request
 
 
 app = Flask(__name__)
@@ -8,10 +8,10 @@ testuser = {
 	"name": "Moby Dick",
 	"image": "https://media.pri.org/s3fs-public/styles/story_main/public/images/2019/08/2031_episodeimage.jpg",
 	"bio": "Ishmael describes Moby Dick as having two prominent white areas around \"a peculiar snow-white wrinkled forehead, and a high, pyramidical white hump\", the rest of his body being of stripes and patches between white and gray.",
-	"pokes": "50",
-	"pokers": "9",
-	"pokesGiven": "80",
-	"pokersGiven": "15"
+	"pokes": 50,
+	"pokers": 9,
+	"pokesGiven": 80,
+	"pokersGiven": 15
 }
 
 @app.route("/")
@@ -28,10 +28,12 @@ def login():
 	"""Return the login / sign-up page."""
 	return render_template("login.html")
 
-@app.route("/@<user>")
+@app.route("/@<user>", methods=["POST", "GET"])
 def user(user):
-    """Return the user profile page."""
-    return render_template("user.html",
+	"""Return, and potentially poke, the user profile page."""
+	if request.method == "POST":
+		testuser["pokes"] += 1
+	return render_template("user.html",
 		page = { "user": { "id": user, "name": testuser["name"], "image": testuser["image"], "bio": testuser["bio"], "pokes": testuser["pokes"],
 	"pokers": testuser["pokers"] }},
 		user = testuser)
