@@ -46,6 +46,9 @@ The application will utilize the federated server-to-server API provided by Acti
 
 Links:
 [ActivityPub specification](https://www.w3.org/TR/activitypub/)
+
 [Flask-based ActivityPub server](https://github.com/rowanlupton/pylodon)
+
 [Guide for new ActivityPub implementers](https://socialhub.activitypub.rocks/pub/guide-for-new-activitypub-implementers)
+
 [The Flask Mega-Tutorial Part II: Templates](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-ii-templates) 
