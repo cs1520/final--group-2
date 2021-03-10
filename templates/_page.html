@@ -11,10 +11,10 @@
 			<i class="material-icons">home</i>
 			Home
 		</a>
-		<a href="/" class="button{% if request.path.startswith("/explore") %} active{% endif %}">
+		<!--<a href="/" class="button{% if request.path.startswith("/explore") %} active{% endif %}">
 			<i class="material-icons">public</i>
 			Explore
-		</a>
+		</a>-->
 		<a href="/notifications" class="button{% if request.path.startswith("/notifications") %} active{% endif %}">
 			<i class="material-icons">notifications</i>
 			Notifications
@@ -45,9 +45,7 @@
 			<input id="search-input" name="q" type="text" placeholder="Search for a friend (to poke)..." value="{{ page.query }}">
 			<ul id="search-list" class="card"></ul>
 		</form>
-		<a class="header-image" href="/@{{ user.id }}">
-			<img class="img-round" src="{{ user.image }}">
-		</a>
+		<a class="button" href="/login">Sign Out</a>
 	</header>
 
 	{% block content %}{% endblock %}

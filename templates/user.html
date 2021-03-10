@@ -7,18 +7,22 @@
 
 <div id="profile-area">
     <form id="poke-button" action="@{{ page.user.id }}" method="POST">
-        <input type="image" id="profile-image-poke" src="{{ page.user.image }}" alt="Poke {{ page.user.name }}'s profile picture!">
+        <input class="img-round" type="image" id="profile-image-poke" src="{{ page.user.image }}" alt="Poke {{ page.user.name }}'s profile picture!">
+		<label class="text-radius">Poke me!</label>
     </form>
-    <p id="profile-display-name">{{ page.user.name }}</p>
-    <p id="profile-username">{{ page.user.id }}</p>
+
+	<h4 id="profile-name">
+		<span>{{ page.user.name }}</span>
+		<small>@{{ page.user.id }}</small>
+	</h4>
     <p id="profile-description">{{ page.user.bio }}</p>
 </div>
 
 <div id="poke-statistics-area">
-    <div id="poked-by-box">
+    <div id="poked-by-box" class="card" style="display: block; padding: 16px;">
         <p id="poked-by-text">{{ page.user.name }} received {{ page.user.pokes }} pokes from {{ page.user.pokers }} different users.</p>
+		<canvas id="poke-interval-chart" aria-label="{{ page.user.name }}'s poke statistics over time" role="img"></canvas>
     </div>
-    <canvas id="poke-interval-chart" aria-label="{{ page.user.name }}'s poke statistics over time" role="img"></canvas>
 </div>
 
 <script src="/static/js/profile.js" type="text/javascript"></script>

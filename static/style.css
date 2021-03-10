@@ -65,6 +65,7 @@ a {
 	border-radius: 56px;
 	text-decoration: none;
 	font-weight: bold;
+	cursor: pointer;
 
 	color: var(--on-light-3);
 	background-color: transparent;
@@ -136,7 +137,7 @@ img {
 	max-width: 100%;
 }
 
-img.img-round {
+.img-round {
 	border-radius: 50%;
 	border: 1px solid var(--on-light);
 }
@@ -163,7 +164,7 @@ input[type=password] {
 
 /* user-item (small element displaying basic user info) */
 .user-item {
-	display: inline-flex;
+	display: flex;
 	align-items: center;
 }
 
@@ -185,6 +186,25 @@ input[type=password] {
 .user-item div > .user-id {
 	display: block;
 	color: var(--on-light-3);
+}
+
+/* text radius (wrap text around a circle): see text-radius.js */
+.text-radius {
+	width: 0;
+}
+
+.text-radius > span {
+	font-family: monospace;
+	pointer-events: none;
+	color: var(--primary);
+
+	position: absolute;
+	left: 50%;
+	top: -1.6em;
+	bottom: 50%;
+
+	transform-origin: bottom left;
+	transform: rotate(var(--text-radius-deg));
 }
 
 /* page styles (specific page components) */
@@ -249,6 +269,11 @@ main {
 	overflow-x: hidden;
 }
 
+main > *:not(header) {
+	width: 80%;
+	margin: 0 auto;
+}
+
 header {
 	display: flex;
 	padding: 16px;
@@ -299,9 +324,10 @@ header .header-image > img {
 
 	list-style: none;
 	display: none;
+	z-index: 100;
 }
 
-#search-input:focus + #search-list {
+#search-input:focus + #search-list, #search-list:hover {
 	display: block;
 }
 
@@ -351,4 +377,65 @@ header .header-image > img {
 	justify-content: center;
 	margin: 8px 0;
 	width: 200px;
+}
+
+/* user profile page */
+#profile-area {
+	text-align: center;
+	padding: 64px 0;
+}
+
+#profile-area::after {
+	position: absolute;
+	content: ' ';
+
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 204px;
+	z-index: -1;
+
+	background: linear-gradient(
+		-28deg,
+		var(--primary-5),
+		var(--accent-4)
+	);
+}
+
+#poke-button {
+	position: relative;
+}
+
+#poke-button > input {
+	height: 128px;
+	width: 128px;
+}
+
+#poke-button > input + label {
+	font-size: 1.2em;
+}
+
+#profile-name > * {
+	display: block;
+}
+
+#profile-name > small {
+	color: var(--primary);
+}
+
+/* notifications page */
+
+#notifications-list {
+	list-style-type: none;
+	padding: 0;
+}
+
+#notifications-list > li {
+	padding: 16px 0;
+}
+
+/* home page styles */
+#home-page > p {
+	font-size: 1.3em;
+	
 }

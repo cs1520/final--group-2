@@ -1,5 +1,13 @@
 {% extends "_page.html" %}
 
 {% block content %}
-This is the notifications page.
+<div>
+	<h1 style="text-align:center">Notifications</h1>
+
+	<ul id="notifications-list" style="list-style-type: none">
+		{% for poke in page.pokes %}
+		<li>You were poked by <a href="/@{{ poke.id }}">{{ poke.name }}</a></li>
+		{% endfor %}
+	</ul>
+</div>
 {% endblock %}
