@@ -6,7 +6,7 @@
 <!-- This is the user file for {{ page.user.name }} (@{{ page.user.id }}). -->
 
 <div id="profile-area">
-    <form id="poke-button" action="" method="post">
+    <form id="poke-button" action="@{{ page.user.id }}" method="POST">
         <input type="image" id="profile-image-poke" src="{{ page.user.image }}" alt="Poke {{ page.user.name }}'s profile picture!">
     </form>
     <p id="profile-display-name">{{ page.user.name }}</p>
