@@ -19,6 +19,10 @@
 			<i class="material-icons">notifications</i>
 			Notifications
 		</a>
+		<a href="/friends" class="button{% if request.path.startswith("/friends") %} active{% endif %}">
+			<i class="material-icons">group</i>
+			Friends
+		</a>
 		<a href="/@{{ user.id }}" class="button{% if request.path.startswith("/@") %} active{% endif %}">
 			<i class="material-icons">person</i>
 			Profile
