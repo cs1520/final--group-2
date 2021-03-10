@@ -45,6 +45,7 @@ The application will utilize the federated server-to-server API provided by Acti
 * More refined search details (partial name search, etc.)
 
 Links:
+
 [ActivityPub specification](https://www.w3.org/TR/activitypub/)
 [Flask-based ActivityPub server](https://github.com/rowanlupton/pylodon)
 [Guide for new ActivityPub implementers](https://socialhub.activitypub.rocks/pub/guide-for-new-activitypub-implementers)
