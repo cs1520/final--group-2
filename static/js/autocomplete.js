@@ -3,22 +3,20 @@ const names = ["Jacob", "James", "Jason", "Bader", "Moby Dick", "John Doe", "CS1
 window.addEventListener("load", () => {
 	const searchForm = document.getElementById("search-form");
 	const searchInput = document.getElementById("search-input");
+	const searchList = document.getElementById("search-list");
 	//TODO: Implement previous searches in suggestions
 
-	//This only works for all lower case input
-	searchInput.addEventListener("input", (e)=> {
+	function updateNames() {
 		let namesArray = [];
 
-		if(e.target.value) {
-			namesArray = names.filter(name => name.toLowerCase().includes(e.target.value));
-			//Quick fix to unbullet list
-			namesArray = namesArray.map(name => `<li style="list-style: none">${name}</li>`);
+		if (searchInput.value) {
+			namesArray = names.filter(name => name.toLowerCase().includes(searchInput.value.toLowerCase()));
+			namesArray = namesArray.map(name => `<li><a class="button" href="/@mobydick">${name}</a></li>`);
 		}
-		showNames(namesArray);
-	})
-});
-function showNames(namesArray){
 
-	const html = !namesArray.length ? '' : namesArray.join("");
-	document.querySelector("ul").innerHTML = html;
-}
+		searchList.innerHTML = namesArray.join("") || '<small>No results found.</small>';
+	}
+
+	searchInput.addEventListener("input", updateNames);
+	updateNames();
+});
