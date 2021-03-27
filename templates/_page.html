@@ -30,10 +30,10 @@
 	</div>
 
 	<a href="/@{{ user.id }}" class="user-item button">
-		<img class="img-round" src="{{ user.image }}">
+		<img class="img-round" src="{{ user['image'] }}">
 		<div>
-			<span class="user-name">{{ user.name }}</span>
-			<span class="user-id">@{{ user.id }}</span>
+			<span class="user-name">{{ user['name'] }}</span>
+			<span class="user-id">@{{ user['id'] }}</span>
 		</div>
 	</a>
 </nav>
@@ -45,7 +45,7 @@
 			<input id="search-input" name="q" type="text" placeholder="Search for a friend (to poke)..." value="{{ page.query }}">
 			<ul id="search-list" class="card"></ul>
 		</form>
-		<a class="button" href="/login">Sign Out</a>
+		<a class="button" href="/logout">Sign Out</a>
 	</header>
 
 	{% block content %}{% endblock %}

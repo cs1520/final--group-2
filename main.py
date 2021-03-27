@@ -1,7 +1,9 @@
-from flask import Flask, redirect, url_for, render_template, request
+from flask import Flask, redirect, url_for, render_template, request, session
 
+from datastore import dao
 
 app = Flask(__name__)
+app.secret_key = b'oaijrwoizsdfmnvoiajw34foinmzsdv98j234'
 
 testusers = [
 	{
@@ -62,37 +64,28 @@ testuser = {
 	"pokers": 9
 }
 
+# Get the user of the current session id
+def get_session_user():
+	if session.get('user') is None:
+		return
+
+	user = dao.get_user(session['user'])
+	return user
+
+# Render a page for the current user
+def render_page(template, options={}):
+	session_user = get_session_user()
+	return render_template(template,
+		page = options,
+		user = session_user)
+
 @app.route("/")
 def home():
-    """Return the user's home page."""
-    print("Hit the route!")
-    return render_template("index.html",
-		page = {},
-		user = testuser)
+	"""Return the user's home page."""
+	if get_session_user() is None:
+		return redirect(url_for("login"))
 
-@app.route("/login")
-@app.route("/register")
-def login():
-	"""Return the login / sign-up page."""
-	return render_template("login.html")
-
-@app.route("/@<user>", methods=["POST", "GET"])
-def user(user):
-	endpointUser = getuser(user)
-	"""Return, and potentially poke, the user profile page."""
-	if request.method == "POST":
-		endpointUser["pokes"] += 1
-	return render_template("user.html",
-		page = { "user": endpointUser },
-		user = testuser)
-
-@app.route("/search")
-def search():
-	"""Return the results for a search query."""
-	user = request.args.get('')
-	return render_template("search.html",
-		page = { "query": request.args.get('q') },
-		user = getuser(request.args.get('q')))
+	return render_page("index.html")
 
 @app.route("/friends")
 def friends():
@@ -114,6 +107,10 @@ def getuser(user):
 		if tu["id"] == user:
 			return tu
 	return None
+
+import route_login
+import route_search
+import route_user
 
 if __name__ == "__main__":
     app.run(host='127.0.0.1', port=8080, debug=True)

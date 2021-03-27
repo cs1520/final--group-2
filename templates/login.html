@@ -35,5 +35,11 @@
 		<input type="submit" class="button button-primary" value="Sign in"/>
 	</div>
 	{% endif %}
+
+	{% if page.error %}
+	<br>
+	<p style="color: #ff9090; background-color: #000; padding: 8px;"><strong>{{ page.error }}</strong></p>
+	{% endif %}
+
 </form>
 {% endblock %}

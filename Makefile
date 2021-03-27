@@ -1,7 +1,7 @@
 .PHONY: start install clean
 
 start: install
-	. venv/bin/activate; FLASK_APP=main FLASK_ENV=development flask run
+	. venv/bin/activate; GOOGLE_APPLICATION_CREDENTIALS=service-acct-keys.json FLASK_APP=main FLASK_ENV=development flask run
 
 install: venv/touchfile
 
