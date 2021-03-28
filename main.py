@@ -90,25 +90,12 @@ def home():
 @app.route("/friends")
 def friends():
 	"""Return the user's friends list."""
-	return render_template("friends.html",
-		page = {"friends": testusers},
-		user = testuser)
-
-@app.route("/notifications")
-def notifications():
-	"""Return the user's recent pokes."""
-	return render_template("notifications.html",
-		page = { "pokes": testusers },
-		user = testuser)
-
-def getuser(user):
-	"""Return the user with the specified id."""
-	for tu in testusers:
-		if tu["id"] == user:
-			return tu
-	return None
+	return render_page("friends.html", {
+		"friends": testusers
+	})
 
 import route_login
+import route_notifications
 import route_search
 import route_user
 
