@@ -8,7 +8,7 @@
         <img class="img-round" id="profile-image-poke" src="{{ page.user['image'] }}" alt="Change your profile picture">
     </div>
 
-	<form style="text-align: left;" action="/@{{ page.user['id'] }}/edit" method="POST">
+	<form style="text-align: left;" action="/@{{ page.user['id'] }}/edit" method="POST" enctype="multipart/form-data">
 		<label for="edit-image"><small>Profile Image</small></label><br>
 		<input id="edit-image" name="image" type="file" accept="image/*">
 		<br><br>

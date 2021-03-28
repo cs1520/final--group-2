@@ -2,6 +2,7 @@ from flask import render_template, request, redirect, url_for
 
 from main import app, get_session_user, render_page
 from datastore import dao
+from storage import upload_file
 
 @app.route("/@<user_id>", methods=["POST", "GET"])
 def user(user_id):
@@ -38,13 +39,22 @@ def user_edit(user_id):
 
 	# if method=POST, update the user entry
 	if request.method == "POST":
-		dao.update_user({
+		user_edit = {
 			"id": user_id,
 			"name": request.form.get("name"),
 			"bio": request.form.get("bio")
-		})
+		}
+
+		# upload new profile image (if provided)
+		user_image = request.files.get("image")
+		if user_image:
+			user_edit["image"] = upload_file(user_image)
+
+		# update user info & return
+		dao.update_user(user_edit)
 		return redirect(url_for('user', user_id=user_id))
 
+	# otherwise, return the user edit page
 	user = dao.get_user(user_id)
 	return render_page("user-edit.html", {
 		"user": user
