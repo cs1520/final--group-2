@@ -424,6 +424,7 @@ header .header-image > img {
 #profile-edit {
 	position: absolute;
 	right: 10%;
+	transform: translateY(-50%);
 }
 
 #profile-name > * {

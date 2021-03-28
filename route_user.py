@@ -28,7 +28,7 @@ def user(user_id):
 		"pokes": pokes
 	})
 
-@app.route("/@<user_id>/edit", methods=["GET", "PUT"])
+@app.route("/@<user_id>/edit", methods=["GET", "POST"])
 def user_edit(user_id):
 	"""Return the editor interface for the user profile page."""
 	session_user = get_session_user()
@@ -36,8 +36,14 @@ def user_edit(user_id):
 	if session_user is None or session_user["id"] != user_id:
 		return redirect(url_for('user', user_id=user_id))
 
-	if request.method == "PUT":
-		"TODO: dao.update_user"
+	# if method=POST, update the user entry
+	if request.method == "POST":
+		dao.update_user({
+			"id": user_id,
+			"name": request.form.get("name"),
+			"bio": request.form.get("bio")
+		})
+		return redirect(url_for('user', user_id=user_id))
 
 	user = dao.get_user(user_id)
 	return render_page("user-edit.html", {

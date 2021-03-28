@@ -45,6 +45,23 @@ class Datastore:
 		user = self.client.get(user_key)
 		return user
 
+	def update_user(self, user_edit):
+		"""Update the properties of a user with the edited values."""
+		user_key = self.client.key(USER_ENTITY_TYPE, user_edit['id'])
+		user = self.client.get(user_key)
+		# Only update properties if they exist in user_edit
+		if "name" in user_edit:
+			user["name"] = user_edit["name"]
+		if "bio" in user_edit:
+			user["bio"] = user_edit["bio"]
+		if "image" in user_edit:
+			user["image"] = user_edit["image"]
+		if "pokes" in user_edit:
+			user["pokes"] = user_edit["pokes"]
+
+		self.client.put(user)
+		return user
+
 	def query_users(self, name):
 		"""Perform a substring query of name to usernames and return the results as a list."""
 		# Rough username search by prefix
