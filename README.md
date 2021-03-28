@@ -1,4 +1,25 @@
-## Project Description
+## Local Development
+
+You should have [Python 3](https://www.python.org/download/releases/3.0/) and [venv](https://docs.python.org/3/library/venv.html) installed.
+
+This project contains a [Makefile](https://www.gnu.org/software/make/) to simplify the installation/debugging process. `make install` will set up dependencies; `make start` will run the project as a local server; `make clean` will remove all generated files.
+
+Otherwise, to perform this process manually:
+
+- run `python3 -m venv venv` to create a virtual environment
+- activate venv by running `venv/bin/activate`
+- install the python dependencies: `pip3 install -Ur requirements.txt`
+- start the flask app: `FLASK_APP=main FLASK_ENV=development flask run`
+
+### Google Cloud Access
+
+If running locally (e.g. for debugging), the project needs access to the Google Cloud project through a service account:
+
+- install the [Google Cloud SDK](https://cloud.google.com/sdk/docs/install)
+- run `gcloud iam service-accounts keys create service-acct-keys.json --iam-account mydatastore@astute-acolyte-149912.iam.gserviceaccount.com` (should create a JSON file in the project dir)
+- either start the server with `make` or set the `GOOGLE_APPLICATION_CREDENTIALS=service-acct-keys.json` environment variable
+
+# Project Description
 Our social media application “Acufuncture” will enable users to poke each other as the sole means of intercommunication. Users may set up an account with a distinctive username, search the usernames of individuals they wish to interact with, and poke them as many times as they are able.
 The application will utilize the federated server-to-server API provided by ActivityPub in order to search for other users, view their information (e.g., display name, bio, how many times they have been poked), and poke them. Users of other ActivityPub-implementing websites, such as Mastodon, will be able to follow and poke our users in a similar fashion.
 
@@ -52,4 +73,4 @@ Links:
 
 [Guide for new ActivityPub implementers](https://socialhub.activitypub.rocks/pub/guide-for-new-activitypub-implementers)
 
-[The Flask Mega-Tutorial Part II: Templates](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-ii-templates) 
+[The Flask Mega-Tutorial Part II: Templates](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-ii-templates)
