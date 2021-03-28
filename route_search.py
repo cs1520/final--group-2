@@ -19,4 +19,11 @@ def search_json():
 	"""Return search results as a JSON array"""
 	query = request.args.get("q")
 	users = dao.query_users(query)
-	return jsonify(users)
+
+	# Only return "id" and "name" keys
+	result_users = list(map(lambda user: {
+		"id": user['id'],
+		"name": user['name']
+	}, users))
+
+	return jsonify(result_users)

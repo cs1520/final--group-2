@@ -29,10 +29,13 @@ class Datastore:
 		user_key = self.client.key(USER_ENTITY_TYPE, username)
 		user = datastore.Entity(key=user_key)
 		user["id"] = username
-		user["password"] = password
+		user["name"] = username
+		user["bio"] = "This user hasn't changed their bio yet. You should poke them."
+		user["image"] = "/static/img/profile.png"
 		user["pokes"] = 0
-		user["salt"] = salt
 		user["created"] = datetime.now()
+		user["password"] = password
+		user["salt"] = salt
 		self.client.put(user)
 		return user
 
@@ -40,6 +43,23 @@ class Datastore:
 		"""Retrieve a user with their corresponding username."""
 		user_key = self.client.key(USER_ENTITY_TYPE, id)
 		user = self.client.get(user_key)
+		return user
+
+	def update_user(self, user_edit):
+		"""Update the properties of a user with the edited values."""
+		user_key = self.client.key(USER_ENTITY_TYPE, user_edit['id'])
+		user = self.client.get(user_key)
+		# Only update properties if they exist in user_edit
+		if "name" in user_edit:
+			user["name"] = user_edit["name"]
+		if "bio" in user_edit:
+			user["bio"] = user_edit["bio"]
+		if "image" in user_edit:
+			user["image"] = user_edit["image"]
+		if "pokes" in user_edit:
+			user["pokes"] = user_edit["pokes"]
+
+		self.client.put(user)
 		return user
 
 	def query_users(self, name):

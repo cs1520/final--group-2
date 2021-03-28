@@ -1,9 +1,16 @@
 {% extends "_page.html" %}
 
 {% block content %}
+{% if user['name'] == user['id'] %}
+<div class="card" style="display: block; text-align: center;">
+	<h3>Set up your profile!</h3>
+	<p>Visit the <a href="/@{{ user['id'] }}/edit">profile page</a> to finish configuring your new account.</p>
+</div>
+{% endif %}
+
 <div id="home-page">
 	<h1 style="text-align:center">Welcome to Acufuncture!</h1>
-    
+
     <p style="text-align:center">The number one platform where you can poke your friends and be poked by them!</p>
 
     <p style="text-align:center">Our social media application “Acufuncture” will enable users to poke each other as the sole means of intercommunication. Users may set up an account with a distinctive username, search the usernames of individuals they wish to interact with, and poke them as many times as they are able. The application will utilize the federated server-to-server API provided by ActivityPub in order to search for other users, view their information (e.g., display name, bio, how many times they have been poked), and poke them. Users of other ActivityPub-implementing websites, such as Mastodon, will be able to follow and poke our users in a similar fashion.</p>

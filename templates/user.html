@@ -1,27 +1,32 @@
 {% extends "_page.html" %}
 
-{% block title %}{{ page.user.name }}'s Profile{% endblock %}
+{% block title %}{{ page.user['name'] }}'s Profile{% endblock %}
 
 {% block content %}
-<!-- This is the user file for {{ page.user.name }} (@{{ page.user.id }}). -->
-
 <div id="profile-area">
-    <form id="poke-button" action="@{{ page.user.id }}" method="POST">
-        <input class="img-round" type="image" id="profile-image-poke" src="{{ page.user.image }}" alt="Poke {{ page.user.name }}'s profile picture!">
+    <form id="poke-button" action="/@{{ page.user['id'] }}" method="POST">
+        <input class="img-round" type="image" id="profile-image-poke" src="{{ page.user['image'] }}" alt="Poke {{ page.user['name'] }}'s profile picture!">
 		<label class="text-radius">Poke me!</label>
     </form>
 
+	{% if user['id'] == page.user['id'] %}
+	<a id="profile-edit" class="button button-accent" href="/@{{ page.user['id'] }}/edit">
+		<i class="material-icons">edit</i>
+		Edit
+	</a>
+	{% endif %}
+
 	<h4 id="profile-name">
-		<span>{{ page.user.name }}</span>
-		<small>@{{ page.user.id }}</small>
+		<span>{{ page.user['name'] }}</span>
+		<small>@{{ page.user['id'] }}</small>
 	</h4>
-    <p id="profile-description">{{ page.user.bio }}</p>
+    <p id="profile-description">{{ page.user['bio'] }}</p>
 </div>
 
 <div id="poke-statistics-area">
     <div id="poked-by-box" class="card" style="display: block; padding: 16px;">
-        <p id="poked-by-text">{{ page.user.name }} received {{ page.user.pokes }} pokes from {{ page.user.pokers }} different users.</p>
-		<canvas id="poke-interval-chart" aria-label="{{ page.user.name }}'s poke statistics over time" role="img"></canvas>
+        <p id="poked-by-text">{{ page.user['name'] }} received {{ page.user['pokes'] }} pokes from N different users.</p>
+		<canvas id="poke-interval-chart" aria-label="{{ page.user['name'] }}'s poke statistics over time" role="img"></canvas>
     </div>
 </div>
 
