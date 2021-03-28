@@ -1,32 +1,45 @@
-from flask import render_template, request
+from flask import render_template, request, redirect, url_for
 
 from main import app, get_session_user, render_page
 from datastore import dao
 
-@app.route("/@<user>", methods=["POST", "GET", "PUT"])
+@app.route("/@<user_id>", methods=["POST", "GET"])
 def user(user_id):
 	"""Return, and potentially poke, the user profile page."""
 	session_user = get_session_user()
+	user = session_user
+	pokes = None
 
+	# if the user is looking at their own profile...
 	if session_user and session_user["id"] == user_id:
-		if request.method == "PUT":
-			"TODO: dao.update_user"
-
-		my_sent_pokes = dao.query_pokes_sent_by(session_user)
-		return render_page("user.html", {
-			"user": session_user,
-			"pokes": my_sent_pokes
-		})
+		# set the pokes list to all interactions sent from the current user
+		pokes = dao.query_pokes_sent_by(session_user['id'])
 	else:
-		other_user = dao.get_user(user_id)
+		user = dao.get_user(user_id)
+		# if method=POST, poke the user
 		if request.method == "POST":
-			dao.create_poke(session_user, other_user)
-
-		sent_pokes = None
+			dao.create_poke(session_user['id'], user['id'])
+		# set the pokes list to all interactions between the two users
 		if session_user is not None:
-			sent_pokes = dao.query_poke_sent_between(session_user, other_user)
+			pokes = dao.query_pokes_sent_between(session_user['id'], user['id'])
 
-		return render_page("user.html", {
-			"user": user,
-			"pokes_between": sent_pokes
-		})
+	return render_page("user.html", {
+		"user": session_user,
+		"pokes": pokes
+	})
+
+@app.route("/@<user_id>/edit", methods=["GET", "PUT"])
+def user_edit(user_id):
+	"""Return the editor interface for the user profile page."""
+	session_user = get_session_user()
+
+	if session_user is None or session_user["id"] != user_id:
+		return redirect(url_for('user', user_id=user_id))
+
+	if request.method == "PUT":
+		"TODO: dao.update_user"
+
+	user = dao.get_user(user_id)
+	return render_page("user-edit.html", {
+		"user": user
+	})

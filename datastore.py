@@ -29,10 +29,13 @@ class Datastore:
 		user_key = self.client.key(USER_ENTITY_TYPE, username)
 		user = datastore.Entity(key=user_key)
 		user["id"] = username
-		user["password"] = password
+		user["name"] = username
+		user["bio"] = "This user hasn't changed their bio yet. You should poke them."
+		user["image"] = "/static/img/profile.png"
 		user["pokes"] = 0
-		user["salt"] = salt
 		user["created"] = datetime.now()
+		user["password"] = password
+		user["salt"] = salt
 		self.client.put(user)
 		return user
 

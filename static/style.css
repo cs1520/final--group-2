@@ -64,6 +64,7 @@ a {
 	border: none;
 	border-radius: 56px;
 	text-decoration: none;
+	font-size: 1em;
 	font-weight: bold;
 	cursor: pointer;
 
@@ -145,8 +146,10 @@ img {
 /* text input styles */
 input[type=text],
 input[type=email],
-input[type=password] {
+input[type=password],
+textarea {
 	padding: 8px;
+	resize: none;
 
 	background-color: var(--neutral);
 	border: 1px solid var(--on-light-5);
@@ -267,6 +270,7 @@ main {
 	flex-grow: 1;
 	flex-shrink: 1;
 	overflow-x: hidden;
+	position: relative;
 }
 
 main > *:not(header) {
@@ -406,13 +410,20 @@ header .header-image > img {
 	position: relative;
 }
 
-#poke-button > input {
+#poke-button > input,
+#poke-button > img {
 	height: 128px;
 	width: 128px;
 }
 
-#poke-button > input + label {
+#poke-button > input + label,
+#poke-button > img + label {
 	font-size: 1.2em;
+}
+
+#profile-edit {
+	position: absolute;
+	right: 10%;
 }
 
 #profile-name > * {

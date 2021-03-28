@@ -23,13 +23,13 @@
 			<i class="material-icons">group</i>
 			Friends
 		</a>
-		<a href="/@{{ user.id }}" class="button{% if request.path.startswith("/@") %} active{% endif %}">
+		<a href="/@{{ user['id'] }}" class="button{% if request.path.startswith("/@") %} active{% endif %}">
 			<i class="material-icons">person</i>
 			Profile
 		</a>
 	</div>
 
-	<a href="/@{{ user.id }}" class="user-item button">
+	<a href="/@{{ user['id'] }}" class="user-item button">
 		<img class="img-round" src="{{ user['image'] }}">
 		<div>
 			<span class="user-name">{{ user['name'] }}</span>
@@ -45,7 +45,7 @@
 			<input id="search-input" name="q" type="text" placeholder="Search for a friend (to poke)..." value="{{ page.query }}">
 			<ul id="search-list" class="card"></ul>
 		</form>
-		<a class="button" href="/logout">Sign Out</a>
+		<a id="sidebar-toggle" class="nav-toggle" href="/logout"><i class="material-icons">logout</i></a>
 	</header>
 
 	{% block content %}{% endblock %}
