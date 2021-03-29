@@ -25,7 +25,7 @@ def user(user_id):
 			pokes = dao.query_pokes_sent_between(session_user['id'], user['id'])
 
 	return render_page("user.html", {
-		"user": session_user,
+		"user": user,
 		"pokes": pokes
 	})
 
