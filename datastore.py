@@ -130,5 +130,13 @@ class Datastore:
 		results = query.fetch(limit=result_limit)
 		return list(results)
 
+	def query_friends(self, friends):
+		query = self.client.query(kind=USER_ENTITY_TYPE)
+		for friend in friends:
+			query.add_filter("id", "=", friend)
+		results = query.fetch()
+		return list(results)
+
+
 
 dao = Datastore()

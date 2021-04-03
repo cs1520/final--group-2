@@ -61,7 +61,32 @@ testuser = {
 	"image": "https://media.pri.org/s3fs-public/styles/story_main/public/images/2019/08/2031_episodeimage.jpg",
 	"bio": "Ishmael describes Moby Dick as having two prominent white areas around \"a peculiar snow-white wrinkled forehead, and a high, pyramidical white hump\", the rest of his body being of stripes and patches between white and gray.",
 	"pokes": 50,
-	"pokers": 9
+	"pokers": 9,
+	"friends": [
+		{
+		"id": "mobydick",
+		"name": "Moby Dick",
+		"image": "https://media.pri.org/s3fs-public/styles/story_main/public/images/2019/08/2031_episodeimage.jpg",
+		"bio": "Ishmael describes Moby Dick as having two prominent white areas around \"a peculiar snow-white wrinkled forehead, and a high, pyramidical white hump\", the rest of his body being of stripes and patches between white and gray.",
+		"pokes": 50,
+		"pokers": 9
+		},
+		{"id": "ahab",
+		"name": "Captain Ahab",
+		"image": "https://betterlivingthroughbeowulf.com/wp-content/uploads/2011/11/Captain-Ahab.jpg",
+		"bio": "I want to catch that white whale!",
+		"pokes": 99,
+		"pokers": 35
+		},
+		{
+		"id": "doomguy",
+		"name": "The Doom Slayer",
+		"image": "https://giantbomb1.cbsistatic.com/uploads/scale_small/8/87790/3068872-doom.png",
+		"bio": "In the first age, in the first battle, when the shadows first lengthened, one stood. He chose the path of perpetual torment. In his ravenous hatred he found no peace. And with boiling blood he scoured the Umbral Plains seeking vengeance against the dark lords who had wronged him. And those that tasted the bite of his sword named him... The Doom Slayer.",
+		"pokes": 1,
+		"pokers": 9
+		}
+	],
 }
 
 # Get the user of the current session id
@@ -90,8 +115,9 @@ def home():
 @app.route("/friends")
 def friends():
 	"""Return the user's friends list."""
+	user = get_session_user()
 	return render_page("friends.html", {
-		"friends": testusers
+		"friends": dao.query_friends(user["friends"]),
 	})
 
 import route_login
