@@ -1,5 +1,5 @@
 from google.cloud import datastore
-from datetime import datetime
+from datetime import datetime, timedelta
 
 # pleasedontpoke.me/@user1@othersite.com
 # othersite.com/@user1
@@ -18,7 +18,6 @@ from datetime import datetime
 
 USER_ENTITY_TYPE = "user"
 POKE_ENTITY_TYPE = "poke"
-SEARCH_RESULT_LIMIT = 6
 
 class Datastore:
 	def __init__(self):
@@ -30,7 +29,7 @@ class Datastore:
 		user = datastore.Entity(key=user_key)
 		user["id"] = username
 		user["name"] = username
-		user["bio"] = "This user hasn't changed their bio yet. You should poke them."
+		user["bio"] = ""
 		user["image"] = "/static/img/profile.png"
 		user["pokes"] = 0
 		user["created"] = datetime.now()
@@ -62,7 +61,7 @@ class Datastore:
 		self.client.put(user)
 		return user
 
-	def query_users(self, name):
+	def query_users(self, name, search_limit=6):
 		"""Perform a substring query of name to usernames and return the results as a list."""
 		# Rough username search by prefix
 		query = self.client.query(kind=USER_ENTITY_TYPE)
@@ -71,44 +70,64 @@ class Datastore:
 		query.add_filter("id", ">=", name)
 		query.add_filter("id", "<=", name_z)
 		# Limit number of results to hardcoded value
-		results = query.fetch(limit=SEARCH_RESULT_LIMIT)
+		results = query.fetch(limit=search_limit)
 		return list(results)
 
 	def create_poke(self, poker, pokee):
-		"""Create a poke entity and store it in Datastore. Increment and update pokee's poke total."""
-		poke_key = self.client.key(POKE_ENTITY_TYPE)
+		"""Create a poke entity and store it in Datastore. Increment, update, and return pokee's poke total."""
 		poker_key = self.client.key(USER_ENTITY_TYPE, poker)
-		poke = datastore.Entity(key=poke_key, parent=poker_key)
+		poke_key = self.client.key(POKE_ENTITY_TYPE, parent=poker_key)
+		poke = datastore.Entity(key=poke_key)
 		poke["created"] = datetime.now()
 		poke["pokee"] = pokee
-		
 
-		pokee_entity = get_user(pokee)
+		pokee_entity = self.get_user(pokee)
 		pokee_entity["pokes"] += 1
 
 		self.client.put(pokee_entity)
 		self.client.put(poke)
 
-	def query_pokes_sent_between(self, poker, pokee):
+	def query_pokes_sent_between(self, poker, pokee, after_date=None, result_limit=10000):
 		"""Return a list of pokes sent from one user to another specific user."""
 		poker_key = self.client.key(USER_ENTITY_TYPE, poker)
 		query = self.client.query(kind=POKE_ENTITY_TYPE, ancestor=poker_key)
 		query.add_filter("pokee", "=", pokee)
-		results = query.fetch()
+
+		if after_date is not None:
+			query.add_filter("created", ">", after_date)
+		
+		results = query.fetch(limit=result_limit)
 		return list(results)
 
-	def query_pokes_sent_by(self, poker):
+	def query_pokes_sent_by(self, poker, after_date=None, result_limit=10000):
 		"""Return a list of pokes a user has sent."""
 		poker_key = self.client.key(USER_ENTITY_TYPE, poker)
 		query = self.client.query(kind=POKE_ENTITY_TYPE, ancestor=poker_key)
-		results = query.fetch()
-		return list(results)
+
+		if after_date is not None:
+			query.add_filter("created", ">", after_date)
 	
-	def query_pokes_sent_to(self, pokee):
+		results = query.fetch(limit=result_limit)
+		return list(results)
+
+	def query_pokes_sent_to(self, pokee, before_date=None, after_date=None, result_limit=10000):
 		"""Return a list of pokes a user has received."""
 		query = self.client.query(kind=POKE_ENTITY_TYPE)
 		query.add_filter("pokee", "=", pokee)
-		results = query.fetch()
+
+		# if before_date is unset, find pokes before "now"
+		if before_date is None:
+			before_date = datetime.now()
+
+		# filter by created date params (must occur before {before_date} and after {after_date})
+		query.add_filter("created", "<=", before_date)
+		if after_date is not None:
+			query.add_filter("created", ">", after_date)
+
+		# sort created index in descending order (newest first)
+		query.order = ["-created"]
+
+		results = query.fetch(limit=result_limit)
 		return list(results)
 
 

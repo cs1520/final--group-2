@@ -1,14 +1,17 @@
 {% extends "_page.html" %}
 
 {% block content %}
-<!--Will make a separate CSS file, just testing-->
-<style>
-    form {
-        display: block;
-        margin: 0 auto;
-        text-align: center;
-    }
-</style>
-
+<div>
+	{% for user in page.users %}
+	<div href="/@{{ user.id }}" class="user-item button" onclick="location.href = '/@{{ user.id }}';" style="margin: 0 -16px;">
+		<img class="img-round" src="{{ user.image }}">
+		<div>
+			<span class="user-name">{{ user.name }}</span>
+			<span class="user-id">@{{ user.id }}</span>
+		</div>
+		<a class="button button-neutral" href="/@{{ user.id }}">Poke</a>
+	</div>
+	{% endfor %}
+</div>
 {% endblock %}
 

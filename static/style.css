@@ -339,7 +339,7 @@ header .header-image > img {
 	padding: 8px 16px;
 	margin: 4px 0;
 
-	display: block;
+	display: flex;
 	text-align: left;
 }
 
@@ -411,13 +411,40 @@ header .header-image > img {
 }
 
 #poke-button > input,
-#poke-button > img {
+#poke-button > img,
+#poke-overlay {
 	height: 128px;
 	width: 128px;
 }
 
-#poke-button > input + label,
-#poke-button > img + label {
+#poke-overlay {
+	position: absolute;
+    top: 0;
+    left: 50%;
+	transform: translateX(-50%);
+	pointer-events: none;
+
+	background-color: var(--on-light-3);
+	border-radius: 50%;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: var(--on-dark);
+
+	opacity: 0;
+	transition: opacity 0.25s;
+}
+
+#profile-image-edit {
+	cursor: pointer;
+}
+
+.img-round:hover + #poke-overlay {
+	opacity: 1;
+}
+
+#poke-button > .text-radius {
 	font-size: 1.2em;
 }
 

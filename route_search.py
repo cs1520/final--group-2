@@ -6,11 +6,19 @@ from datastore import dao
 @app.route("/search")
 def search():
 	"""Return the results for a search query."""
-	user = request.args.get('q')
-	# TODO: perform intensive user search
-	return render_page("search", {
+	query = request.args.get('q')
+	users = dao.query_users(query)
+	# TODO: append any remote user profiles (e.g. "someone@example.com")
+
+	result_users = list(map(lambda user: {
+		"id": user["id"],
+		"name": user["name"],
+		"image": user["image"]
+	}, users))
+
+	return render_page("search.html", {
 		"query": request.args.get('q'),
-		"users": []
+		"users": result_users
 	})
 
 # /api/search/?q=username

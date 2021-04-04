@@ -1,0 +1,8 @@
+indexes:
+
+- kind: poke
+  ancestor: yes
+  properties:
+  - name: pokee
+  - name: created
+    direction: desc

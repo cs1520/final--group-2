@@ -3,11 +3,40 @@
 {% block title %}{{ page.user['name'] }}'s Profile{% endblock %}
 
 {% block content %}
+{% if page.was_poked %}
 <div id="profile-area">
-    <form id="poke-button" action="/@{{ page.user['id'] }}" method="POST">
+	<div id="poke-button" class="poked">
+		<img class="img-round" id="profile-image-edit" src="{{ page.user['image'] }}" alt="{{ page.user['name'] }}'s profile picture">
+		<h1>You just poked {{ page.user['name'] }}!</h1>
+	</div>
+
+	<p id="profile-description">{{ page.user['bio'] }}</p>
+	<br><br>
+	<a class="button button-primary" href="/@{{ page.user['id'] }}">Back to Profile</a>
+</div>
+{% else %}
+
+<div id="profile-area">
+	{% if user['id'] == page.user['id'] %}
+    <div id="poke-button">
+        <img id="profile-image-edit" class="img-round" src="{{ page.user['image'] }}" alt="Change your profile picture">
+		<div id="poke-overlay">
+			<i class="material-icons">photo_camera</i>
+		</div>
+
+		<form id="profile-image-form" style="display: none;" action="/@{{ page.user['id'] }}/edit" method="POST" enctype="multipart/form-data">
+			<input id="profile-image-input" name="image" type="file" accept="image/*">
+		</form>
+    </div>
+	{% else %}
+	<form id="poke-button" action="/@{{ page.user['id'] }}" method="POST">
+		<label class="text-radius" style="display: none;">Poke me!</label>
         <input class="img-round" type="image" id="profile-image-poke" src="{{ page.user['image'] }}" alt="Poke {{ page.user['name'] }}'s profile picture!">
-		<label class="text-radius">Poke me!</label>
+		<div id="poke-overlay">
+			<i class="material-icons">touch_app</i>
+		</div>
     </form>
+	{% endif %}
 
 	{% if user['id'] == page.user['id'] %}
 	<a id="profile-edit" class="button button-accent" href="/@{{ page.user['id'] }}/edit">
@@ -20,16 +49,41 @@
 		<span>{{ page.user['name'] }}</span>
 		<small>@{{ page.user['id'] }}</small>
 	</h4>
-    <p id="profile-description">{{ page.user['bio'] }}</p>
+
+	{% if user['bio'] == "" %}
+		{% if user['id'] == page.user['id'] %}
+		<p id="profile-description">Let everyone know who you are, and why they should poke you.</p>
+		{% else %}
+		<p id="profile-description">This user hasn't changed their bio yet. You should poke them.</p>
+		{% endif %}
+	{% else %}
+	<p id="profile-description">{{ page.user['bio'] }}</p>
+	{% endif %}
 </div>
 
 <div id="poke-statistics-area">
-    <div id="poked-by-box" class="card" style="display: block; padding: 16px;">
-        <p id="poked-by-text">{{ page.user['name'] }} received {{ page.user['pokes'] }} pokes from N different users.</p>
-		<canvas id="poke-interval-chart" aria-label="{{ page.user['name'] }}'s poke statistics over time" role="img"></canvas>
+	<span id="user-metadata" data-session-user-id="{{ user['id'] }}" data-user-id="{{ page.user['id'] }}"></span>
+
+    <div class="card" style="display: block; padding: 16px; margin: 16px 0;">
+        <p>{{ page.user['name'] }} received {{ page.user['pokes'] }} pokes from other users.</p>
+		<canvas id="user-pokes-received" aria-label="{{ page.user['name'] }}'s poke statistics over time" role="img"></canvas>
     </div>
+
+	{% if user['id'] == page.user['id'] %}
+	<div class="card" style="display: block; padding: 16px; margin: 16px 0;">
+		<canvas id="user-pokes-by" aria-label="{{ page.user['name'] }}'s poke statistics over time" role="img"></canvas>
+    </div>
+	{% endif %}
+
+	{% if user and user['id'] != page.user['id'] %}
+	<div class="card" style="display: block; padding: 16px; margin: 16px 0;">
+		<canvas id="user-pokes-between" aria-label="{How often you have poked { page.user['name'] }} this week" role="img"></canvas>
+    </div>
+	{% endif %}
 </div>
 
-<script src="/static/js/profile.js" type="text/javascript"></script>
+<script type="module" src="/static/js/profile-edit.js"></script>
+<script type="module" src="/static/js/profile-graph.js"></script>
 
+{% endif %}
 {% endblock %}

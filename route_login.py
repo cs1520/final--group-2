@@ -47,6 +47,9 @@ def login():
 	username = request.form.get("username")
 	password = request.form.get("password")
 
+	if len(username) <= 0:
+		return render_template("login.html", page = { "error": "Username must be an ASCII string of nonzero length." })
+
 	# get user from db
 	user = dao.get_user(username)
 	if user is None:

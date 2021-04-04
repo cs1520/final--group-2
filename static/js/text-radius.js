@@ -4,4 +4,5 @@ document.querySelectorAll(".text-radius").forEach((element) => {
 	element.innerHTML = element.innerText.split('').map((char, index) => {
 		return `<span style="--text-radius-deg: ${index * 7}deg;">${char}</span>`;
 	}).join('');
+	element.style.display = null;
 });
