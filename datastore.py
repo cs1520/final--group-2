@@ -31,6 +31,7 @@ class Datastore:
 		user["name"] = username
 		user["bio"] = ""
 		user["image"] = "/static/img/profile.png"
+		user["friends"] = []
 		user["pokes"] = 0
 		user["created"] = datetime.now()
 		user["password"] = password
@@ -57,6 +58,8 @@ class Datastore:
 			user["image"] = user_edit["image"]
 		if "pokes" in user_edit:
 			user["pokes"] = user_edit["pokes"]
+		if "friends" in user_edit:
+			user["friends"] = user_edit["friends"]
 
 		self.client.put(user)
 		return user
@@ -129,6 +132,5 @@ class Datastore:
 
 		results = query.fetch(limit=result_limit)
 		return list(results)
-
 
 dao = Datastore()

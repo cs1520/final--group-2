@@ -5,13 +5,13 @@
 	<h1>Friends</h1>
 
 	{% for user in page.friends %}
-	<div href="/@{{ user.id }}" class="user-item button" onclick="location.href = '/@{{ user.id }}';" style="margin: 0 -16px;">
+	<div class="user-item button" onclick="location.href = '/@{{ user['id'] }}';" style="margin: 0 -16px;">
 		<img class="img-round" src="{{ user.image }}">
 		<div>
 			<span class="user-name">{{ user.name }}</span>
-			<span class="user-id">@{{ user.id }}</span>
+			<span class="user-id">@{{ user['id'] }}</span>
 		</div>
-		<a class="button button-neutral" href="/@{{ user.id }}">Poke</a>
+		<a class="button button-neutral" href="/@{{ user['id'] }}">Poke</a>
 	</div>
 	{% endfor %}
 

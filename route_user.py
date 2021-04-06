@@ -6,6 +6,14 @@ from storage import upload_file
 
 from datetime import datetime, timedelta
 
+def user_add_friend(user, friend):
+	if friend["id"] in user["friends"]:
+		return
+
+	# Add the friend to user's friends list
+	user["friends"].append(friend["id"])
+	dao.update_user(user)
+
 @app.route("/@<user_id>", methods=["POST", "GET"])
 def user(user_id):
 	"""Return, and potentially poke, the user profile page."""
@@ -24,6 +32,7 @@ def user(user_id):
 		# if method=POST, poke the user
 		if request.method == "POST":
 			dao.create_poke(session_user["id"], user["id"])
+			user_add_friend(session_user, user)
 			was_poked = True
 		# get all poke interactions sent from session_user to user
 		if session_user is not None:
