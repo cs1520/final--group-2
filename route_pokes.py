@@ -4,6 +4,13 @@ from datetime import datetime, timedelta
 from main import app, render_page, get_session_user
 from datastore import dao
 
+# Pagination:
+# /api/pokes?id=user -> [p1, p2, p3]
+# /api/pokes?id=user&before=<p3.date> -> [p4, p5, p6]
+# show more button 
+# keep track of the last poke seen and append the new set of poke to them
+
+
 @app.route("/api/pokes")
 def query_pokes():
 	"""Query pokes received before a certain date."""

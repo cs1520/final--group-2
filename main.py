@@ -112,19 +112,12 @@ def home():
 
 	return render_page("index.html")
 
-@app.route("/friends")
-def friends():
-	"""Return the user's friends list."""
-	user = get_session_user()
-	return render_page("friends.html", {
-		"friends": dao.query_friends(user["friends"]),
-	})
-
 import route_login
 import route_notifications
 import route_search
 import route_user
 import route_pokes
+import route_friends
 
 if __name__ == "__main__":
     app.run(host='127.0.0.1', port=8080, debug=True)
