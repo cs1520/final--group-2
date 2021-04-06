@@ -82,6 +82,7 @@ class Datastore:
 		poke_key = self.client.key(POKE_ENTITY_TYPE, parent=poker_key)
 		poke = datastore.Entity(key=poke_key)
 		poke["created"] = datetime.now()
+		poke["poker"] = poker
 		poke["pokee"] = pokee
 
 		pokee_entity = self.get_user(pokee)
