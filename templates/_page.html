@@ -10,7 +10,7 @@
 	<div class="nav-list">
 		<a href="/" class="button{% if request.path == "/" %} active{% endif %}">
 			<i class="material-icons">home</i>
-			Home
+			<span>Home</span>
 		</a>
 		<!--<a href="/" class="button{% if request.path.startswith("/explore") %} active{% endif %}">
 			<i class="material-icons">public</i>
@@ -18,15 +18,15 @@
 		</a>-->
 		<a href="/notifications" class="button{% if request.path.startswith("/notifications") %} active{% endif %}">
 			<i class="material-icons">notifications</i>
-			Notifications
+			<span>Notifications</span>
 		</a>
 		<a href="/friends" class="button{% if request.path.startswith("/friends") %} active{% endif %}">
 			<i class="material-icons">group</i>
-			Friends
+			<span>Friends</span>
 		</a>
 		<a href="/@{{ user['id'] }}" class="button{% if request.path.startswith("/@") %} active{% endif %}">
 			<i class="material-icons">person</i>
-			Profile
+			<span>Profile</span>
 		</a>
 
 	</div>
@@ -43,21 +43,24 @@
 
 <main>
 	<header>
-		{% if user %}
-		<a id="sidebar-toggle" class="nav-toggle" href="#"><i class="material-icons">menu</i></a>
-		{% endif %}
+		<div class="header-left">
+			{% if user %}
+			<a id="sidebar-toggle" class="button" href="#"><i class="material-icons">menu</i></a>
+			{% endif %}
+		</div>
 		<form id="search-form" action="/search" enctype="application/x-www-form-urlencoded" autocomplete="off">
 			<input id="search-input" name="q" type="text" placeholder="Search for a friend (to poke)..." value="{{ page.query }}">
 			<ul id="search-list" class="card"></ul>
 		</form>
 
-		<a id="dark-button" class="button"><i class="material-icons">dark_mode</i></a>
+		<div class="header-right">
+			<a id="dark-button" class="button"><i class="material-icons">dark_mode</i></a>
+			<script type="module" src="/static/js/checkDark.js"></script>
 
-		{% if user %}
-		<a id="sidebar-toggle" class="nav-toggle" href="/logout"><i class="material-icons">logout</i></a>
-		{% endif %}
-		
-		<script type="module" src="/static/js/checkDark.js"></script>
+			{% if user %}
+			<a class="button" href="/logout"><i class="material-icons">logout</i></a>
+			{% endif %}
+		</div>
 	</header>
 
 	{% block content %}{% endblock %}
