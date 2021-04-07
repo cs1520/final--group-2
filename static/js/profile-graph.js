@@ -111,7 +111,7 @@ async function loadCharts() {
 			},
 			title: {
 				display: true,
-				text: userId + "'s Poke Totals This Week"
+				text: userId + "'s Received Pokes This Week"
 			}
 		}
 	});
@@ -154,7 +154,7 @@ async function loadCharts() {
                 },
                 title: {
                     display: true,
-                    text: userId + "'s Poke Totals This Week"
+                    text: userId + "'s Sent Pokes This Week"
                 }
             }
         });
