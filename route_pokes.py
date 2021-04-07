@@ -10,6 +10,7 @@ from datastore import dao
 # show more button 
 # keep track of the last poke seen and append the new set of poke to them
 
+# http://localhost:5000/api/pokes?id=test
 
 @app.route("/api/pokes")
 def query_pokes():
@@ -19,13 +20,9 @@ def query_pokes():
 	limit = request.args.get("limit")
 
 	# Python is fun.
-	limit_count = None
-	if limit is not None:
-		limit_count = int(limit)
+	limit_count = int(limit) if limit else None
 
-	before_date = None
-	if before_string is not None:
-		before_date = datetime.strptime(before_string, "%a, %d %b %Y %H:%M:%S %Z")
+	before_date = datetime.strptime(before_string, "%a, %d %b %Y %H:%M:%S %Z") if before_string  and before_string != "null" else None
 
 	pokes = dao.query_pokes_sent_to(user_id, before_date=before_date, result_limit=limit_count)
 
