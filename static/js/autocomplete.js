@@ -1,4 +1,4 @@
-import { debounce } from './utils.js';
+import { debounce, allStorage } from './utils.js';
 
 const searchForm = document.getElementById("search-form");
 const searchInput = document.getElementById("search-input");
@@ -24,7 +24,10 @@ async function updateNames() {
 			.then(response => response.json());
 	} else {
 		// get previous searches from localStorage
-		results = allStorage().map((str) => JSON.parse(str));
+		results = Object.values(allStorage("autocomplete-"))
+			.map((str) => JSON.parse(str));
+
+		// sort by date (descending order)
 		results.sort((a, b) => b.date - a.date);
 
 		// obtain first 6 elements from results
@@ -37,7 +40,7 @@ async function updateNames() {
 		let userJson = JSON.stringify(user).replace(/\"/g, "&quot;");
 		return `<li><a class="button searchButton" data-user="${userJson}" href="/@${user.id}">
 			${name ? '' : '<i class="material-icons">history</i>'}
-			${user.name}
+			<span>${user.name}</span>
 		</a></li>`
 	});
 	searchList.innerHTML = namesArray.join("") || '<small>No results found.</small>';
@@ -53,19 +56,7 @@ async function updateNames() {
 function insertRecentSearch(user) {
 	user.date = Date.now();
 	// insert user object into local storage as "id": "{ id, name, date }"
-	localStorage.setItem(user.id, JSON.stringify(user));
-}
-
-//Returns an array of all values from local storage
-function allStorage() {
-	let values = [];
-	let keys = Object.keys(localStorage);
-	for(var i = 0; i < localStorage.length; i++) {
-		values.push(localStorage.getItem(keys[i]));
-	}
-	console.log(values);
-	return values;
-
+	localStorage.setItem("autocomplete-" + user.id, JSON.stringify(user));
 }
 
 //Adds 250ms delay for each key press (to prevent spamming the search endpoint)

@@ -50,6 +50,11 @@ forEach:
 */
 
 const DAYS_OF_WEEK = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const CHART_COLORS = {
+	backgroundColor: "#3f5cf2",
+	borderColor: "#3f5cf2",
+	color: "rgba(128, 128, 128, 0.2)"
+};
 
 function getWeekdayLabels() {
 	// day = index of current day of week
@@ -81,8 +86,7 @@ async function loadCharts() {
 				label: "Pokes",
 				// map the poke data in order of the labels index array
 				data: weekdayLabels.map((key) => pokesReceivedDays[key]),
-				backgroundColor: "#00FFFF",
-				borderColor: "#00FFFF",
+				...CHART_COLORS,
 				fill: false
 			}],
 			labels: weekdayLabels,
@@ -94,6 +98,14 @@ async function loadCharts() {
 					ticks: {
 						min: weekdayLabels[0],
 						max: weekdayLabels[6]
+					},
+					gridLines: {
+						...CHART_COLORS
+					}
+				}],
+				yAxes: [{
+					gridLines: {
+						...CHART_COLORS
 					}
 				}]
 			},
@@ -117,8 +129,7 @@ async function loadCharts() {
                     label: "Pokes",
                     // map the poke data in order of the labels index array
                     data: weekdayLabels.map((key) => pokesByDays[key]),
-                    backgroundColor: "#00FFFF",
-                    borderColor: "#00FFFF",
+                    ...CHART_COLORS,
                     fill: false
                 }],
                 labels: weekdayLabels,
@@ -130,8 +141,16 @@ async function loadCharts() {
                         ticks: {
                             min: weekdayLabels[0],
                             max: weekdayLabels[6]
-                        }
-                    }]
+                        },
+						gridLines: {
+							...CHART_COLORS
+						}
+					}],
+					yAxes: [{
+						gridLines: {
+							...CHART_COLORS
+						}
+					}]
                 },
                 title: {
                     display: true,
@@ -154,8 +173,7 @@ async function loadCharts() {
                     label: "Pokes",
                     // map the poke data in order of the labels index array
                     data: weekdayLabels.map((key) => pokesBetweenDays[key]),
-                    backgroundColor: "#00FFFF",
-                    borderColor: "#00FFFF",
+                    ...CHART_COLORS,
                     fill: false
                 }],
                 labels: weekdayLabels,
@@ -167,8 +185,16 @@ async function loadCharts() {
                         ticks: {
                             min: weekdayLabels[0],
                             max: weekdayLabels[6]
-                        }
-                    }]
+						},
+						gridLines: {
+							...CHART_COLORS
+						}
+					}],
+					yAxes: [{
+						gridLines: {
+							...CHART_COLORS
+						}
+					}]
                 },
                 title: {
                     display: true,

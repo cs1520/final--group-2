@@ -4,11 +4,11 @@ const sidebarToggle = document.getElementById("sidebar-toggle");
 sidebarToggle && sidebarToggle.addEventListener("click", (e) => {
 	e.preventDefault();
 
-	// toggle sidebar "hidden" attribute
-	if (sidebar.getAttribute("hidden")) {
-		sidebar.removeAttribute("hidden");
+	// toggle sidebar attribute (referenced in CSS)
+	if (sidebar.getAttribute("toggled")) {
+		sidebar.removeAttribute("toggled");
 	} else {
-		sidebar.setAttribute("hidden", "true");
+		sidebar.setAttribute("toggled", "true");
 	}
 
 	return false;

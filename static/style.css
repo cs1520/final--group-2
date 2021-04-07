@@ -124,8 +124,8 @@ a {
 	background-color: var(--accent-4);
 }
 
-.button > .material-icons {
-	margin-right: 12px;
+.button > .material-icons + * {
+	margin-left: 12px;
 }
 
 /* material-icons styles (prevent user selection) */
@@ -230,8 +230,19 @@ nav {
 	transition: min-width .25s;
 }
 
-nav[hidden] {
+nav[toggled] {
 	min-width: 0;
+}
+
+@media screen and (max-width: 850px) {
+	/* reverse nav toggle attribute (hidden by default) on small screens */
+	nav {
+		min-width: 0;
+	}
+
+	nav[toggled] {
+		min-width: 320px;
+	}
 }
 
 nav > * {
@@ -269,6 +280,7 @@ nav > * {
 main {
 	flex-grow: 1;
 	flex-shrink: 1;
+	min-width: 500px;
 	overflow-x: hidden;
 	position: relative;
 }
@@ -284,15 +296,14 @@ header {
 	align-items: center;
 }
 
-header .nav-toggle {
-	background: none;
-	border: none;
-	color: var(--on-light-4);
-	text-decoration: none;
+header .header-left {
+	flex: 1;
+	text-align: left;
 }
 
-header .nav-toggle > .material-icons {
-	display: block;
+header .header-right {
+	flex: 1;
+	text-align: right;
 }
 
 header .header-image > img {
@@ -303,20 +314,20 @@ header .header-image > img {
 
 /* search input (in header) */
 #search-form {
-	flex-grow: 1;
+	width: 50%;
 	text-align: center;
 
 	position: relative;
 }
 
 #search-input {
-	width: 50%;
+	width: 100%;
 	padding: 12px;
 	text-align: center;
 }
 
 #search-list {
-	width: 50%;
+	width: 100%;
 
 	position: absolute;
 	top: calc(100% + 8px);

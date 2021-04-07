@@ -33,11 +33,9 @@ def pokes_sent_between():
 	"""Return the jsonified list of pokes sent from the session user to another user."""
 	session_user = get_session_user()
 	user_id = request.args.get("id")
-	if session_user and session_user["id"] == user_id:
+	if session_user and session_user["id"] != user_id:
 		pokes_between = dao.query_pokes_sent_between(session_user["id"], user_id, datetime.now() - timedelta(days=6))
 		return jsonify(pokes_between)
-	else:
-		return None
 
 @app.route("/api/pokesby")
 def pokes_sent_by():
