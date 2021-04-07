@@ -99,7 +99,10 @@ class Datastore:
 
 		if after_date is not None:
 			query.add_filter("created", ">", after_date)
-		
+
+		# sort created index in descending order (newest first)
+		query.order = ["-created"]
+
 		results = query.fetch(limit=result_limit)
 		return list(results)
 
@@ -110,7 +113,10 @@ class Datastore:
 
 		if after_date is not None:
 			query.add_filter("created", ">", after_date)
-	
+
+		# sort created index in descending order (newest first)
+		query.order = ["-created"]
+
 		results = query.fetch(limit=result_limit)
 		return list(results)
 
