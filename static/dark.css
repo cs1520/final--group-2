@@ -1,68 +1,37 @@
-/* Common theme */
-html,
-body,
-:not([style*="background-color:"]) {
-    background-color: rgb(16, 20, 23) !important;
+* {
+	--light: #101010;
+	--neutral: #212121;
+	--dark: #303030;
+
+	--primary: rgba(89, 113, 245, 1);
+	--primary-1: rgba(89, 113, 245, 0.9);
+	--primary-2: rgba(89, 113, 245, 0.75);
+	--primary-3: rgba(89, 113, 245, 0.6);
+	--primary-4: rgba(89, 113, 245, 0.4);
+	--primary-5: rgba(89, 113, 245, 0.2);
+
+	--accent: rgba(121, 145, 255, 1);
+	--accent-1: rgba(121, 145, 255, 0.9);
+	--accent-2: rgba(121, 145, 255, 0.75);
+	--accent-3: rgba(121, 145, 255, 0.6);
+	--accent-4: rgba(121, 145, 255, 0.4);
+	--accent-5: rgba(121, 145, 255, 0.2);
+
+	--on-light: #ffffff;
+	--on-light-1: rgba(255, 255, 255, 0.9);
+	--on-light-2: rgba(255, 255, 255, 0.75);
+	--on-light-3: rgba(255, 255, 255, 0.6);
+	--on-light-4: rgba(255, 255, 255, 0.4);
+	--on-light-5: rgba(255, 255, 255, 0.2);
+
+	--on-dark: #000000;
+	--on-dark-1: rgba(0, 0, 0, 0.9);
+	--on-dark-2: rgba(0, 0, 0, 0.75);
+	--on-dark-3: rgba(0, 0, 0, 0.6);
+	--on-dark-4: rgba(0, 0, 0, 0.4);
+	--on-dark-5: rgba(0, 0, 0, 0.2);
 }
-html,
-body,
-:not([style*="color:"]),
-.sr-reader *:not([class*='sr-pivot']) {
-    color: rgb(167, 158, 139) !important;
-}
-h1:not([style*="color:"]),
-h2:not([style*="color:"]),
-h3:not([style*="color:"]),
-h4:not([style*="color:"]),
-h5:not([style*="color:"]),
-h6:not([style*="color:"]) {
-    color: rgb(247, 142, 102) !important;
-}
-cite:not([style*="color:"]) {
-    color: rgb(128, 204, 148) !important;
-}
-input:not([style*="background-color:"]),
-textarea:not([style*="background-color:"]),
-button:not([style*="background-color:"]),
-[role="button"] {
-    background-color: rgb(32, 48, 64) !important;
-}
-input:not([style*="background-color:"]):hover,
-textarea:not([style*="background-color:"]):hover,
-button:not([style*="background-color:"]):hover,
-[role="button"]:hover {
-    background-color: rgb(30, 54, 78) !important;
-}
-input:not([style*="background-color:"]):active, input:not([style*="background-color:"]):focus,
-textarea:not([style*="background-color:"]):active, textarea:not([style*="background-color:"]):focus,
-button:not([style*="background-color:"]):active, button:not([style*="background-color:"]):focus,
-[role="button"]:active, [role="button"]:focus {
-    background-color: rgb(29, 56, 83) !important;
-}
-a:not([style*="color:"]) {
-    color: rgb(128, 182, 204) !important;
-}
-a:not([style*="color:"]):hover {
-    color: rgb(142, 193, 217) !important;
-}
-a:not([style*="color:"]):active, a:not([style*="color:"]):focus {
-    color: rgb(155, 203, 230) !important;
-}
-:not([style*="border-color:"]),
-::before,
-::after {
-    border-color: rgb(80, 115, 134) !important;
-}
-div:empty,
-.sr-reader *,
-.sr-backdrop {
-    background-color: rgb(16, 20, 23) !important;
-}
-input::placeholder,
-textarea::placeholder {
-    color: rgb(167, 158, 139) !important;
-}
-input:not([style*="background-image:"]),
-textarea:not([style*="background-image:"]) {
-    background-image: none !important;
+
+.nav-logo > img {
+	filter: contrast(0) brightness(2);
 }
