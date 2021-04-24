@@ -10,7 +10,7 @@
 		<h1>You just poked {{ page.user['name'] }}!</h1>
 	</div>
 
-	<p id="profile-description">{{ page.user['bio'] }}</p>
+	<p id="profile-description">{{ page.user['bio'] | replace('</p>', '</p> ---') | striptags | replace('---', '<br><br>') | safe }}</p>
 	<br><br>
 	<a class="button button-primary" href="/@{{ page.user['id'] }}">Back to Profile</a>
 </div>
@@ -58,6 +58,12 @@
 		{% endif %}
 	{% else %}
 	<p id="profile-description">{{ page.user['bio'] | replace('</p>', '</p> ---') | striptags | replace('---', '<br><br>') | safe }}</p>
+	{% endif %}
+
+	{% if page.user['url'] %}
+	<p>
+		<small><a href="{{ page.user['url'] }}">{{ page.user['url'] }}</a></small>
+	</p>
 	{% endif %}
 </div>
 

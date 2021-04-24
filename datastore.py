@@ -93,6 +93,7 @@ class Datastore:
 
 		self.client.put(pokee_entity)
 		self.client.put(poke)
+		return poke
 
 	def query_pokes_sent_between(self, poker, pokee, after_date=None, result_limit=10000):
 		"""Return a list of pokes sent from one user to another specific user."""

@@ -132,4 +132,8 @@ def ap_poke_user(session_user, user, new_poke):
 
 	# send to remote site as a POST request
 	url = user["ap_url"]
-	post(url, activity.json())
+	post(
+		url,
+		json=activity,
+		headers={"Content-Type": "application/activity+json"}
+	)

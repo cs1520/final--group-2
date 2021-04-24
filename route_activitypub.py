@@ -30,7 +30,7 @@ def ap_webfinger():
 	user = dao.get_user(user_id)
 
 	return jsonify({
-		"subject": f"acct:{user_id}",
+		"subject": f"acct:{user_id}@pleasedontpoke.me",
 		"aliases": [
 			f"https://pleasedontpoke.me/@{user_id}",
 			f"https://pleasedontpoke.me/users/{user_id}"
