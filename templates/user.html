@@ -50,14 +50,14 @@
 		<small>@{{ page.user['id'] }}</small>
 	</h4>
 
-	{% if user['bio'] == "" %}
+	{% if page.user['bio'] == "" %}
 		{% if user['id'] == page.user['id'] %}
 		<p id="profile-description">Let everyone know who you are, and why they should poke you.</p>
 		{% else %}
 		<p id="profile-description">This user hasn't changed their bio yet. You should poke them.</p>
 		{% endif %}
 	{% else %}
-	<p id="profile-description">{{ page.user['bio'] }}</p>
+	<p id="profile-description">{{ page.user['bio'] | replace('</p>', '</p> ---') | striptags | replace('---', '<br><br>') | safe }}</p>
 	{% endif %}
 </div>
 

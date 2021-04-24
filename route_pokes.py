@@ -15,6 +15,9 @@ from datastore import dao
 @app.route("/api/pokes")
 def query_pokes():
 	"""Query pokes received before a certain date."""
+	if get_session_user() is None:
+		return None
+
 	user_id = request.args.get("id")
 	before_string = request.args.get("before")
 	limit = request.args.get("limit")
@@ -25,6 +28,14 @@ def query_pokes():
 	before_date = datetime.strptime(before_string, "%a, %d %b %Y %H:%M:%S %Z") if before_string  and before_string != "null" else None
 
 	pokes = dao.query_pokes_sent_to(user_id, before_date=before_date, result_limit=limit_count)
+	poke_folks = {poke["poker"] for poke in pokes}.union({poke["pokee"] for poke in pokes})
+	images = {}
+	for poke_folk in poke_folks:
+		images[poke_folk] = dao.get_user(poke_folk)["image"]
+
+	for poke in pokes:
+		poke["pokerImage"] = images[poke["poker"]]
+		poke["pokeeImage"] = images[poke["pokee"]]
 
 	return jsonify(pokes)
 

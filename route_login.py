@@ -6,6 +6,10 @@ from flask import render_template, request, session, redirect, url_for
 from main import app
 from datastore import dao
 
+import re
+
+matcher = re.compile('[a-zA-Z0-9_]+')
+
 def create_password_hash(password, salt):
 	sha = sha256(password.encode('utf-8') + salt.encode('utf-8'))
 	return sha.hexdigest()
@@ -26,11 +30,17 @@ def register():
 	if len(username) <= 0:
 		return render_template("login.html", page = { "error": "Username must be an ASCII string of nonzero length." })
 
+	if not matcher.match(username):
+		return render_template("login.html", page = { "error": "Username must only contain alphanumeric characters, with the exception of underscores." })
+
 	if len(password) <= 0 or password != password_confirm:
 		return render_template("login.html", page = { "error": "Passwords must match!" })
 
 	if dao.get_user(username) is not None:
 		return render_template("login.html", page = { "error": "Your username must be unique!" })
+
+	if len(username) > 15:
+		return render_template("login.html", page = { "error": "Your username must be 15 or fewer characters long."})
 
 	# create the new user (with hashed password)
 	password_salt = uuid4().hex
@@ -50,9 +60,12 @@ def login():
 	if len(username) <= 0:
 		return render_template("login.html", page = { "error": "Username must be an ASCII string of nonzero length." })
 
+	if len(password) <= 0:
+		return render_template("login.html", page = { "error": "Password field cannot be empty."})
+
 	# get user from db
 	user = dao.get_user(username)
-	if user is None:
+	if user is None or len(user["password"]) <= 0:
 		return render_template("login.html", page = { "error": "User does not exist!" })
 
 	# compare / verify the provided password hash

@@ -2,6 +2,7 @@
 
 {% block content %}
 <div>
+	<h1>List of users</h1>
 	{% for user in page.users %}
 	<div href="/@{{ user.id }}" class="user-item button" onclick="location.href = '/@{{ user.id }}';" style="margin: 0 -16px;">
 		<img class="img-round" src="{{ user.image }}">

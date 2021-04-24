@@ -7,6 +7,9 @@ from datastore import dao
 def friends():
 	"""Return the user's friends list."""
 	user = get_session_user()
+	if user is None:
+		return redirect(url_for("login"))
+
 	user_friends = list(map(
 		lambda user_id: dao.get_user(user_id),
 		user["friends"]

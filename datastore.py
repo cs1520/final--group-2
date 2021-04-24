@@ -23,14 +23,16 @@ class Datastore:
 	def __init__(self):
 		self.client = datastore.Client()
 
-	def create_user(self, username, password, salt):
+	def create_user(self, username, password="", salt="", name=None, bio="", image="/static/img/profile.png", url="", ap_url=""):
 		"""Create, store, and return a user entity."""
 		user_key = self.client.key(USER_ENTITY_TYPE, username)
 		user = datastore.Entity(key=user_key)
 		user["id"] = username
-		user["name"] = username
-		user["bio"] = ""
-		user["image"] = "/static/img/profile.png"
+		user["name"] = name or username
+		user["bio"] = bio
+		user["image"] = image
+		user["url"] = url
+		user["ap_url"] = ap_url
 		user["friends"] = []
 		user["pokes"] = 0
 		user["created"] = datetime.now()
@@ -76,7 +78,7 @@ class Datastore:
 		results = query.fetch(limit=search_limit)
 		return list(results)
 
-	def create_poke(self, poker, pokee):
+	def create_poke(self, poker, pokee, url=""):
 		"""Create a poke entity and store it in Datastore. Increment, update, and return pokee's poke total."""
 		poker_key = self.client.key(USER_ENTITY_TYPE, poker)
 		poke_key = self.client.key(POKE_ENTITY_TYPE, parent=poker_key)
@@ -84,6 +86,7 @@ class Datastore:
 		poke["created"] = datetime.now()
 		poke["poker"] = poker
 		poke["pokee"] = pokee
+		poke["url"] = url
 
 		pokee_entity = self.get_user(pokee)
 		pokee_entity["pokes"] += 1
@@ -103,6 +106,13 @@ class Datastore:
 		# sort created index in descending order (newest first)
 		query.order = ["-created"]
 
+		results = query.fetch(limit=result_limit)
+		return list(results)
+
+	def query_recent_pokes(self, result_limit=100):
+		"""Return a list of most recent pokes by anyone."""
+		query = self.client.query(kind=POKE_ENTITY_TYPE)
+		query.order = ["-created"]
 		results = query.fetch(limit=result_limit)
 		return list(results)
 

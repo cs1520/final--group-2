@@ -3,6 +3,7 @@ from flask import render_template, request, redirect, url_for, jsonify
 from main import app, get_session_user, render_page
 from datastore import dao
 from storage import upload_file
+from activitypub import ap_poke_user
 
 from datetime import datetime, timedelta
 
@@ -31,9 +32,13 @@ def user(user_id):
 		user = dao.get_user(user_id)
 		# if method=POST, poke the user
 		if request.method == "POST":
-			dao.create_poke(session_user["id"], user["id"])
+			new_poke = dao.create_poke(session_user["id"], user["id"])
 			user_add_friend(session_user, user)
 			was_poked = True
+			# if user is external, send a Note object
+			if "@" in user_id:
+				ap_poke_user(session_user, user, new_poke)
+
 		# get all poke interactions sent from session_user to user
 		if session_user is not None:
 			my_pokes_to = dao.query_pokes_sent_between(session_user["id"], user["id"])

@@ -6,19 +6,21 @@
 	<h3>Set up your profile!</h3>
 	<p>Visit the <a href="/@{{ user['id'] }}/edit">profile page</a> to finish configuring your new account.</p>
 </div>
-{% endif %}
+{% else %}
 
-<div id="home-page">
-	<h1 style="text-align:center">Welcome to Acufuncture!</h1>
-
-    <p style="text-align:center">The number one platform where you can poke your friends and be poked by them!</p>
-
-    <p style="text-align:center">Our social media application “Acufuncture” will enable users to poke each other as the sole means of intercommunication. Users may set up an account with a distinctive username, search the usernames of individuals they wish to interact with, and poke them as many times as they are able. The application will utilize the federated server-to-server API provided by ActivityPub in order to search for other users, view their information (e.g., display name, bio, how many times they have been poked), and poke them. Users of other ActivityPub-implementing websites, such as Mastodon, will be able to follow and poke our users in a similar fashion.</p>
-
-	<p style="display: none;">
-		Hey, you. You're finally awake.
-		You were trying to cross the border, right? Walked right into that Imperial ambush, same as us, and that thief over there.
-	</p>
-
+<div>
+	<h1>Poke someone new!</h1>
+	{%for user in page.suggestions %}
+	<div class="user-item button" onclick="location.href = '/@{{ user['id'] }}';" style="margin: 0 -16px;">
+		<img class="img-round" src="{{ user.image }}">
+		<div>
+			<span class="user-name">{{ user.name }}</span>
+			<span class="user-id">@{{ user['id'] }}</span>
+		</div>
+		<a class="button button-neutral" href="/@{{ user['id'] }}">Poke</a>
+	</div>
+	{% endfor %}
 </div>
+
+{% endif %}
 {% endblock %}
