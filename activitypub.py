@@ -5,6 +5,7 @@ from main import app, render_page
 from datastore import dao
 
 from datetime import datetime, timedelta
+from sys import stderr
 
 # Outgoing requests:
 #   search for user@example.com => query example.com & add new (discovered) user info to db
@@ -20,14 +21,14 @@ def ap_get_links(user_str):
 	domain = None
 	resource = None
 
-	if "@" in user_str:
-		# @user@domain format
-		domain = user_str.split("@")[-1]
-		resource = f"acct:{user_str}"
-	elif user_str.startswith("https://"):
+	if user_str.startswith("https://"):
 		# https://domain/user format
 		domain = user_str.split("/")[2]
 		resource = user_str
+	elif "@" in user_str:
+		# @user@domain format
+		domain = user_str.split("@")[-1]
+		resource = f"acct:{user_str}"
 	else:
 		# invalid format; return null
 		return None
@@ -60,12 +61,12 @@ def ap_get_links(user_str):
 		return None
 
 	return {
-		"id": user_id,
+		"id": user_id.split("acct:")[-1],
 		"ap_url": ap_url,
 		"html_url": html_url
 	}
 
-def ap_get_user(username):
+def ap_get_user(user_str):
 	"""
 	Fetch user info using Webfinger & add to our database
 
@@ -75,7 +76,9 @@ def ap_get_user(username):
 	"""
 
 	# Get profile links/metadata using Webfinger
-	links = ap_get_links(username)
+	links = ap_get_links(user_str)
+	if not links:
+		return None
 
 	# Check that user does not already exist
 	user = dao.get_user(links.get("id"))
@@ -90,8 +93,8 @@ def ap_get_user(username):
 	profile_json = profile_request.json()
 
 	return dao.create_user(
-		username,
-		name=profile_json.get("name") or username,
+		links.get("id"),
+		name=profile_json.get("name") or links.get("id"),
 		bio=profile_json.get("summary") or "",
 		image=(profile_json.get("icon") or {}).get("url"),
 		url=profile_json.get("url") or links.get("html_url"),

@@ -17,7 +17,7 @@ def search():
 	query = request.args.get('q')
 	users = dao.query_users(query)
 
-	if (not users) and ("@" in query):
+	if not users:
 		try: # search for a remote user if possible
 			remote_user = ap_get_user(query)
 			users = [remote_user] if remote_user else []
@@ -45,7 +45,7 @@ def search_json():
 	query = request.args.get("q")
 	users = dao.query_users(query)
 
-	if (not users) and ("@" in query):
+	if not users:
 		try: # search for a remote user if possible
 			remote_user = ap_get_user(query)
 			users = [remote_user] if remote_user else []
