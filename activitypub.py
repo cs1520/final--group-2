@@ -104,9 +104,11 @@ def ap_poke_user(session_user, user, new_poke):
 	- sends user@example.com a Note (in a Create activity) to inform them of the poke
 	"""
 
-	activity_id = f"https://pleasedontpoke.me/users/{session_user['id']}/activity/{new_poke.id}"
+	timestamp = int(new_poke["created"].timestamp())
+
+	activity_id = f"https://pleasedontpoke.me/users/{session_user['id']}/activity/{timestamp}"
 	actor_id = f"https://pleasedontpoke.me/users/{session_user['id']}"
-	note_id = f"https://pleasedontpoke.me/users/{session_user['id']}/poke/{new_poke.id}"
+	note_id = f"https://pleasedontpoke.me/users/{session_user['id']}/poke/{timestamp}"
 
 	published = new_poke["created"].replace(microsecond=0).isoformat() + "Z"
 
