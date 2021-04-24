@@ -5,7 +5,6 @@ from main import app, render_page
 from datastore import dao
 
 from datetime import datetime, timedelta
-from activipy import vocab
 
 # Outgoing requests:
 #   search for user@example.com => query example.com & add new (discovered) user info to db
