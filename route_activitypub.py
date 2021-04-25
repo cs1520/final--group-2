@@ -1,8 +1,10 @@
 from flask import Response, request, jsonify, redirect, url_for
 
-from main import app
+from main import app, get_session_user
 from datastore import dao
 from activitypub import ap_get_user
+
+from httpsig import HeaderVerifier
 
 # Outgoing requests: (defined in activitypub.py)
 
@@ -64,7 +66,10 @@ def ap_get_user(user_id):
 
 	user = dao.get_user(user_id)
 	response = jsonify({
-		"@context": "https://www.w3.org/ns/activitystreams",
+		"@context": [
+			"https://www.w3.org/ns/activitystreams",
+			"https://w3id.org/security/v1"
+		],
 		"type": "Person",
 		"id": f"https://pleasedontpoke.me/users/{user_id}",
 		"inbox": f"https://pleasedontpoke.me/users/{user_id}/inbox",
@@ -78,6 +83,11 @@ def ap_get_user(user_id):
 			"type": "Image",
 			"mediaType": "image/png",
 			"url": user["image"]
+		},
+		"publicKey": {
+			"id": f"https://pleasedontpoke.me/users/{user_id}#main-key",
+			"owner": f"https://pleasedontpoke.me/users/{user_id}",
+			"publicKeyPem": user["rsa_pubkey"]
 		}
 	})
 
@@ -95,8 +105,21 @@ def ap_post_user(user_id):
 	if (not obj) or obj.get("type") != "Note":
 		return None
 
-	user_to = dao.get_user(user_id)
 	user_from = ap_get_user(activity.get("actor"))
+	user_to = dao.get_user(user_id)
+
+	# if the user has a public key, check the request signature
+	if user_from["rsa_pubkey"]:
+		verifier = HeaderVerifier(
+			request.headers,
+			user_from["rsa_pubkey"],
+			method="POST",
+			path=request.path,
+			sign_header="Signature"
+		)
+
+		if not verifier.verify():
+			return Response(403) # Unauthorized (signature does not match)
 
 	# Receive a poke from the user
 	dao.create_poke(user_from["id"], user_to["id"], url=obj["id"])

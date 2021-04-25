@@ -5,7 +5,8 @@ from main import app, render_page
 from datastore import dao
 
 from datetime import datetime, timedelta
-from sys import stderr
+from werkzeug.http import http_date
+from httpsig import HeaderSigner
 
 # Outgoing requests:
 #   search for user@example.com => query example.com & add new (discovered) user info to db
@@ -90,7 +91,10 @@ def ap_get_user(user_str):
 		links.get("ap_url"),
 		headers={"Accept": "application/activity+json"}
 	)
+
 	profile_json = profile_request.json()
+	profile_inbox = profile_json.get("inbox") or links.get("ap_url")
+	profile_pubkey = (profile_json.get("publicKey") or {}).get("publicKeyPem") # get public key from remote profiles
 
 	return dao.create_user(
 		links.get("id"),
@@ -98,7 +102,9 @@ def ap_get_user(user_str):
 		bio=profile_json.get("summary") or "",
 		image=(profile_json.get("icon") or {}).get("url"),
 		url=profile_json.get("url") or links.get("html_url"),
-		ap_url=links.get("ap_url")
+		ap_url=links.get("ap_url"),
+		ap_inbox_url=profile_inbox,
+		rsa_pubkey=profile_pubkey
 	)
 
 def ap_poke_user(session_user, user, new_poke):
@@ -125,7 +131,7 @@ def ap_poke_user(session_user, user, new_poke):
 			"id": note_id,
 			"type": "Note",
 			"attributedTo": actor_id,
-			"content": "Get poked.",
+			"content": "poke.",
 			"published": published
 		},
 		"published": published,
@@ -134,9 +140,25 @@ def ap_poke_user(session_user, user, new_poke):
 	}
 
 	# send to remote site as a POST request
-	url = user["ap_url"]
+	url = user["ap_inbox_url"]
 	post(
 		url,
 		json=activity,
-		headers={"Content-Type": "application/activity+json"}
+		headers={
+			"Content-Type": "application/activity+json",
+			**ap_get_signed_headers("POST", url, session_user)
+		}
 	)
+
+def ap_get_signed_headers(method, url, user):
+	# Sign outgoing requests with the user's RSA key
+	hs = HeaderSigner(f"https://pleasedontpoke.me/users/{user['id']}#main-key", user["rsa_privkey"], algorithm="rsa-sha256")
+	auth = hs.sign(
+		{ "Host": "pleasedontpoke.me", "Date": http_date() },
+		method=method,
+		path="/" + url.split("/", 3)[-1]
+	)
+
+	# move "Authorization" header to "Signature" (where ActivityPub expects it)
+	auth['Signature'] = auth.pop('authorization')[10:]
+	return auth

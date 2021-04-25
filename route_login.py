@@ -1,6 +1,7 @@
 from hashlib import sha256
 from uuid import uuid4
 from hmac import compare_digest
+from Cryptodome.PublicKey import RSA
 from flask import render_template, request, session, redirect, url_for
 
 from main import app
@@ -42,10 +43,22 @@ def register():
 	if len(username) > 15:
 		return render_template("login.html", page = { "error": "Your username must be 15 or fewer characters long."})
 
-	# create the new user (with hashed password)
+	# create the hashed/salted password values
 	password_salt = uuid4().hex
 	password_hash = create_password_hash(password, password_salt)
-	user = dao.create_user(username, password_hash, password_salt)
+
+	# generate a pub/priv RSA keypair (for ActivityPub)
+	rsa_privkey = RSA.generate(2048)
+	rsa_pubkey = rsa_privkey.publickey()
+
+	# add the new user to datastore
+	user = dao.create_user(
+		username,
+		rsa_privkey=rsa_privkey.export_key("PEM").decode("utf-8"),
+		rsa_pubkey=rsa_pubkey.export_key("PEM").decode("utf-8"),
+		password=password_hash,
+		salt=password_salt
+	)
 
 	# set the user session variable
 	session['user'] = user['id']

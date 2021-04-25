@@ -23,7 +23,19 @@ class Datastore:
 	def __init__(self):
 		self.client = datastore.Client()
 
-	def create_user(self, username, password="", salt="", name=None, bio="", image="/static/img/profile.png", url="", ap_url=""):
+	def create_user(
+		self, username,
+		name=None,
+		bio="",
+		image="/static/img/profile.png",
+		url="",
+		ap_url="",
+		ap_inbox_url="",
+		rsa_privkey="",
+		rsa_pubkey="",
+		password="",
+		salt=""
+	):
 		"""Create, store, and return a user entity."""
 		user_key = self.client.key(USER_ENTITY_TYPE, username)
 		user = datastore.Entity(key=user_key)
@@ -33,11 +45,15 @@ class Datastore:
 		user["image"] = image
 		user["url"] = url
 		user["ap_url"] = ap_url
+		user["ap_inbox_url"] = ap_inbox_url
+		user["rsa_privkey"] = rsa_privkey
+		user["rsa_pubkey"] = rsa_pubkey
 		user["friends"] = []
 		user["pokes"] = 0
 		user["created"] = datetime.now()
 		user["password"] = password
 		user["salt"] = salt
+		user.exclude_from_indexes = {"rsa_privkey", "rsa_pubkey"}
 		self.client.put(user)
 		return user
 
