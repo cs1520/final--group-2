@@ -44,12 +44,12 @@ def ap_get_links(user_str):
 
 	info = request.json()
 
-	# get "proper" user id
+	# get the "proper" user id (and ensure that it matches the requested domain)
 	user_id = info.get("subject")
-	if not user_id:
+	if (not user_id) or (not user_id.endswith("@" + domain)):
 		return None
 
-	# get ActivityPub endpoint
+	# get the user's ActivityPub actor urls
 	ap_url = None
 	html_url = None
 	for link in info.get("links") or []:
@@ -67,7 +67,7 @@ def ap_get_links(user_str):
 		"html_url": html_url
 	}
 
-def ap_get_user(user_str):
+def ap_fetch_user(user_str):
 	"""
 	Fetch user info using Webfinger & add to our database
 
@@ -115,7 +115,7 @@ def ap_poke_user(session_user, user, new_poke):
 
 	timestamp = int(new_poke["created"].timestamp())
 
-	activity_id = f"https://pleasedontpoke.me/users/{session_user['id']}/activity/{timestamp}"
+	activity_id = f"https://pleasedontpoke.me/users/{session_user['id']}/poke/{timestamp}/activity"
 	actor_id = f"https://pleasedontpoke.me/users/{session_user['id']}"
 	note_id = f"https://pleasedontpoke.me/users/{session_user['id']}/poke/{timestamp}"
 
@@ -128,15 +128,25 @@ def ap_poke_user(session_user, user, new_poke):
 		"type": "Create",
 		"actor": actor_id,
 		"object": {
+			"@context": "https://www.w3.org/ns/activitystreams",
 			"id": note_id,
 			"type": "Note",
 			"attributedTo": actor_id,
-			"content": "poke.",
-			"published": published
+			"published": published,
+			"url": note_id,
+			"atomUri": note_id,
+			"content": f'👉 <span class="h-card"><a href="{user["ap_url"]}" class="u-url mention">@<span>{user["id"]}</span></a></span> poke.',
+			"to": ["https://www.w3.org/ns/activitystreams#Public"],
+			"cc": [user["ap_url"]],
+			"tag": [{
+				"type": "Mention",
+				"href": user["ap_url"],
+				"name": "@" + user["id"]
+			}]
 		},
 		"published": published,
-		"to": [f"acct:{user['id']}"],
-		"cc": ["https://www.w3.org/ns/activitystreams#Public"]
+		"to": ["https://www.w3.org/ns/activitystreams#Public"],
+		"cc": [user["ap_url"]]
 	}
 
 	# send to remote site as a POST request
@@ -144,21 +154,26 @@ def ap_poke_user(session_user, user, new_poke):
 	post(
 		url,
 		json=activity,
-		headers={
-			"Content-Type": "application/activity+json",
-			**ap_get_signed_headers("POST", url, session_user)
-		}
+		headers=ap_get_signed_headers(url, session_user)
 	)
 
-def ap_get_signed_headers(method, url, user):
+def ap_get_signed_headers(url, user):
 	# Sign outgoing requests with the user's RSA key
-	hs = HeaderSigner(f"https://pleasedontpoke.me/users/{user['id']}#main-key", user["rsa_privkey"], algorithm="rsa-sha256")
-	auth = hs.sign(
-		{ "Host": "pleasedontpoke.me", "Date": http_date() },
-		method=method,
+	hs = HeaderSigner(
+		f"https://pleasedontpoke.me/users/{user['id']}#main-key",
+		user["rsa_privkey"],
+		algorithm="rsa-sha256",
+		headers=["(request-target)", "host", "date", "content-type"],
+		sign_header="Signature"
+	)
+
+	# Construct signed header dict
+	return hs.sign(
+		{
+			"Date": http_date(),
+			"Content-Type": "application/activity+json"
+		},
+		method="POST",
+		host=url.split("/", 3)[-2],
 		path="/" + url.split("/", 3)[-1]
 	)
-
-	# move "Authorization" header to "Signature" (where ActivityPub expects it)
-	auth['Signature'] = auth.pop('authorization')[10:]
-	return auth

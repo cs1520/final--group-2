@@ -2,7 +2,7 @@ from flask import render_template, request, session, jsonify, url_for, redirect
 
 from main import app, render_page, get_session_user
 from datastore import dao
-from activitypub import ap_get_user
+from activitypub import ap_fetch_user
 
 @app.route("/search")
 def search():
@@ -19,7 +19,7 @@ def search():
 
 	if not users:
 		try: # search for a remote user if possible
-			remote_user = ap_get_user(query)
+			remote_user = ap_fetch_user(query)
 			users = [remote_user] if remote_user else []
 		except:
 			"do nothing"
@@ -47,7 +47,7 @@ def search_json():
 
 	if not users:
 		try: # search for a remote user if possible
-			remote_user = ap_get_user(query)
+			remote_user = ap_fetch_user(query)
 			users = [remote_user] if remote_user else []
 		except:
 			"do nothing"

@@ -2,7 +2,7 @@ from flask import Response, request, jsonify, redirect, url_for
 
 from main import app, get_session_user
 from datastore import dao
-from activitypub import ap_get_user
+from activitypub import ap_fetch_user
 
 from httpsig import HeaderVerifier
 
@@ -59,7 +59,7 @@ def ap_webfinger():
 
 @app.route("/users/<user_id>", methods=["GET"])
 def ap_get_user(user_id):
-	accept = request.headers.get("Accept")
+	accept = request.headers.get("Accept") or ""
 
 	# redirect to user (HTML) page if not supplied with an ActivityPub accept header
 	if not ("application/activity+json" in accept or "application/ld+json" in accept):
@@ -98,6 +98,10 @@ def ap_get_user(user_id):
 @app.route("/users/<user_id>", methods=["POST"])
 @app.route("/users/<user_id>/inbox", methods=["POST"])
 def ap_post_user(user_id):
+	# Requests must contain a signature header
+	if "Signature" not in request.headers:
+		return Response(403)
+
 	activity = request.get_json()
 	if activity.get("type") != "Create":
 		return None
@@ -106,21 +110,20 @@ def ap_post_user(user_id):
 	if (not obj) or obj.get("type") != "Note":
 		return None
 
-	user_from = ap_get_user(activity.get("actor"))
+	user_from = ap_fetch_user(activity.get("actor"))
 	user_to = dao.get_user(user_id)
 
-	# if the user has a public key, check the request signature
-	if user_from["rsa_pubkey"]:
-		verifier = HeaderVerifier(
-			request.headers,
-			user_from["rsa_pubkey"],
-			method="POST",
-			path=request.path,
-			sign_header="Signature"
-		)
+	# Verify the request signature (don't accept unsigned pokes!) (otherwise pokers could impersonate other people)
+	verifier = HeaderVerifier(
+		request.headers,
+		user_from.get("rsa_pubkey"),
+		method="POST",
+		path=request.path,
+		sign_header="Signature"
+	)
 
-		if not verifier.verify():
-			return Response(403) # Unauthorized (signature does not match)
+	if not verifier.verify():
+		return Response(403) # Unauthorized (signature does not match)
 
 	# Receive a poke from the user
 	dao.create_poke(user_from["id"], user_to["id"], url=obj["id"])
