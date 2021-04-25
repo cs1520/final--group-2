@@ -60,8 +60,9 @@ def ap_webfinger():
 @app.route("/users/<user_id>", methods=["GET"])
 def ap_get_user(user_id):
 	accept = request.headers.get("Accept")
+
 	# redirect to user (HTML) page if not supplied with an ActivityPub accept header
-	if accept != "application/activity+json" and accept != "application/ld+json":
+	if not ("application/activity+json" in accept or "application/ld+json" in accept):
 		return redirect(url_for("user", user_id=user_id))
 
 	user = dao.get_user(user_id)
