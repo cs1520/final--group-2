@@ -1,4 +1,4 @@
-from flask import Response, request, jsonify, redirect, url_for
+from flask import request, jsonify, redirect, url_for
 
 from main import app, get_session_user
 from datastore import dao
@@ -100,10 +100,10 @@ def ap_get_user(user_id):
 def ap_post_user(user_id):
 	# Requests must contain a signature header
 	if "Signature" not in request.headers:
-		return Response(403)
+		return "Signature not provided", 403
 
 	activity = request.get_json()
-	if activity.get("type") != "Create":
+	if activity and activity.get("type") != "Create":
 		return None
 
 	obj = activity.get("object")
@@ -123,8 +123,12 @@ def ap_post_user(user_id):
 	)
 
 	if not verifier.verify():
-		return Response(403) # Unauthorized (signature does not match)
+		return "Signature not valid", 403 # Unauthorized (signature does not match)
 
-	# Receive a poke from the user
+	# Check if the poke is a duplicate (already exists in db)
+	if dao.query_poke_by_url(obj["id"]):
+		return "", 202
+
+	# Create a new poke from the user
 	dao.create_poke(user_from["id"], user_to["id"], url=obj["id"])
-	return Response(201)
+	return "", 202

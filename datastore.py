@@ -111,6 +111,16 @@ class Datastore:
 		self.client.put(poke)
 		return poke
 
+	def query_poke_by_url(self, url):
+		"""Return the poke that matches the given url (or None)"""
+		query = self.client.query(kind=POKE_ENTITY_TYPE)
+		query.add_filter("url", "=", url)
+		results = query.fetch(limit=1)
+
+		pokes = list(results)
+		return pokes[0] if pokes else None
+
+
 	def query_pokes_sent_between(self, poker, pokee, after_date=None, result_limit=10000):
 		"""Return a list of pokes sent from one user to another specific user."""
 		poker_key = self.client.key(USER_ENTITY_TYPE, poker)

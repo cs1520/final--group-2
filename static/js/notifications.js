@@ -19,7 +19,10 @@ function loadNotifications() {
                 <div>
                     <span class="user-name">You were poked by @${notification["poker"]}</span>
                     <span class="user-id">${time}</span>
-                </div>
+				</div>
+				${notification["url"] ? `
+				<a class="button button-neutral" href="${notification["url"]}">View Post</a>
+				` : ""}
             </div>`;
         });
         notificationsList.innerHTML += html;
